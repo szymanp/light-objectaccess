@@ -1,6 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
+use Light\ObjectAccess\Resource\ResolvedScalar;
 use Light\ObjectAccess\Type\Util\DefaultTypeProvider;
 
 class TypeRegistryTest extends \PHPUnit_Framework_TestCase
@@ -30,5 +31,12 @@ class TypeRegistryTest extends \PHPUnit_Framework_TestCase
 	public function testInvalidGetTypeHelperByName()
 	{
 		$this->registry->getTypeHelperByName("Unknown");
+	}
+
+	public function testResolveValue()
+	{
+		$resolved = $this->registry->resolveValue("hello world");
+		$this->assertInstanceOf(ResolvedScalar::class, $resolved);
+		$this->assertEquals("hello world", $resolved->getValue());
 	}
 }

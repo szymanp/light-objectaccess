@@ -1,8 +1,10 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
-use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Resource\Origin;
+use Light\ObjectAccess\Resource\ResolvedValue;
+use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 
 class TypeRegistry
 {
@@ -32,7 +34,12 @@ class TypeRegistry
 	 */
 	public function getTypeHelperByValue($value)
 	{
-		throw new NotImplementedException;
+		$type = $this->typeProvider->getTypeByValue($value);
+		if (is_null($type))
+		{
+			throw new TypeException("No type corresponding to value %1 is known by this TypeRegistry", $value);
+		}
+		return $this->getTypeHelperByType($type);
 	}
 
 	/**
@@ -83,5 +90,20 @@ class TypeRegistry
 	public function getAddressForType(Type $type)
 	{
 		return $this->typeProvider->getTypeUri($type);
+	}
+
+	/**
+	 * Returns a {@link ResolvedValue} object for the given value.
+	 *
+	 * The value is resolved with no address and no origin.
+	 *
+	 * @param mixed	$value
+	 * @return ResolvedValue
+	 * @throws TypeException	If no type matching the given value is found.
+	 */
+	public function resolveValue($value)
+	{
+		$typeHelper = $this->getTypeHelperByValue($value);
+		return ResolvedValue::create($typeHelper, $value, EmptyResourceAddress::create(), Origin::unavailable());
 	}
 }
