@@ -59,7 +59,7 @@ class DefaultProperty implements Property
 	 */
 	public function getTypeName()
 	{
-		return $this->getTypeName();
+		return $this->typeName;
 	}
 
 	/**

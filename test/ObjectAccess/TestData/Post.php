@@ -1,6 +1,9 @@
 <?php
 namespace Light\ObjectAccess\TestData;
 
+use Light\ObjectAccess\Type\Util\DefaultComplexType;
+use Light\ObjectAccess\Type\Util\DefaultProperty;
+
 class Post
 {
 	/** @var integer */

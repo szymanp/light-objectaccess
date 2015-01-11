@@ -4,6 +4,7 @@ namespace Light\ObjectAccess\Resource;
 use Light\ObjectAccess\Resource\Addressing\ResourceAddress;
 use Light\ObjectAccess\Type\CollectionTypeHelper;
 use Light\ObjectAccess\Type\ComplexTypeHelper;
+use Light\ObjectAccess\Type\SimpleTypeHelper;
 use Light\ObjectAccess\Type\TypeHelper;
 
 /**

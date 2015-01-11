@@ -22,4 +22,13 @@ class TypeRegistryTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf(SimpleTypeHelper::CLASSNAME, $stringType);
 		$this->assertEquals("string", $stringType->getType()->getPhpType());
 	}
+
+	/**
+	 * @expectedException 			\Light\ObjectAccess\Exception\TypeException
+	 * @expectedExceptionMessage	No type with name "Unknown" is known by this TypeRegistry
+	 */
+	public function testInvalidGetTypeHelperByName()
+	{
+		$this->registry->getTypeHelperByName("Unknown");
+	}
 }

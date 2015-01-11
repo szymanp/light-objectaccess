@@ -79,4 +79,22 @@ class Database
 	{
 		return $this->posts[$id];
 	}
+
+	/**
+	 * Returns an arbitrary Author object.
+	 * @return Author
+	 */
+	public function getAnyAuthor()
+	{
+		return current($this->authors);
+	}
+
+	/**
+	 * Returns an arbitrary Post object.
+	 * @return Post
+	 */
+	public function getAnyPost()
+	{
+		return current($this->posts);
+	}
 }

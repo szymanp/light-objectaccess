@@ -16,7 +16,7 @@ class Author
 	public static function createType()
 	{
 		$type = new DefaultComplexType("Light\ObjectAccess\TestData\Author");
-		$type->addProperty(new DefaultProperty("id"));
+		$type->addProperty(new DefaultProperty("id", "int"));
 		$type->addProperty(new DefaultProperty("name"));
 		$type->addProperty(new DefaultProperty("age"));
 		return $type;

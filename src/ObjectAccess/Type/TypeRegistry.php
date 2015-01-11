@@ -2,6 +2,7 @@
 namespace Light\ObjectAccess\Type;
 
 use Light\Exception\NotImplementedException;
+use Light\ObjectAccess\Exception\TypeException;
 
 class TypeRegistry
 {
@@ -42,6 +43,10 @@ class TypeRegistry
 	public function getTypeHelperByName($typeName)
 	{
 		$type = $this->typeProvider->getTypeByName($typeName);
+		if (is_null($type))
+		{
+			throw new TypeException("No type with name \"%1\" is known by this TypeRegistry", $typeName);
+		}
 		return $this->getTypeHelperByType($type);
 	}
 
