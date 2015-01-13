@@ -51,4 +51,13 @@ class DefaultTypeProviderTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf(ComplexType::class, $type);
 		$this->assertEquals(Author::class, $type->getClassName());
 	}
+
+	public function testGetUnknownComplexTypeByValue()
+	{
+		$provider = new DefaultTypeProvider();
+		$provider->addType(Author::createType());
+
+		$type = $provider->getTypeByValue(new \stdClass());
+		$this->assertNull($type);
+	}
 }

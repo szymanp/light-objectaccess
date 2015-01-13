@@ -2,9 +2,14 @@
 namespace Light\ObjectAccess\Type;
 
 /**
- * A marker interface for types.
+ * A base interface for types.
  */
 interface Type
 {
-	// empty
+	/**
+	 * Returns true if the given value can be handled by this type.
+	 * @param mixed	$value
+	 * @return boolean
+	 */
+	public function isValidValue($value);
 }

@@ -52,6 +52,17 @@ class DefaultComplexType implements ComplexType
 	}
 
 	/**
+	 * Returns true if the given value can be handled by this type.
+	 * @param mixed $value
+	 * @return boolean
+	 */
+	public function isValidValue($value)
+	{
+		return is_object($value)
+		       && ($value instanceof $this->className);
+	}
+
+	/**
 	 * Adds a new property to this complex type.
 	 * @param Property $property
 	 * @return $this

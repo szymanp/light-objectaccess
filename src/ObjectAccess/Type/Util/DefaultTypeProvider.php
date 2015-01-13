@@ -89,26 +89,16 @@ class DefaultTypeProvider implements TypeProvider
 	 */
 	public function getTypeByValue($value)
 	{
-		// The implementation below only supports scalars and objects, but not arrays and traversables.
-
 		if (is_scalar($value))
 		{
 			return $this->getTypeByName(gettype($value));
 		}
-		elseif (is_array($value))
+
+		foreach($this->types as $type)
 		{
-			// Maybe instead we should throw a TypeException saying that is it not possible to determine a type for arrays.
-			throw new NotImplementedException;
-		}
-		else if (is_object($value))
-		{
-			if ($value instanceof \ArrayAccess || $value instanceof \Traversable)
+			if ($type->isValidValue($value))
 			{
-				throw new NotImplementedException;
-			}
-			else
-			{
-				return $this->getTypeByName(get_class($value));
+				return $type;
 			}
 		}
 		return null;
