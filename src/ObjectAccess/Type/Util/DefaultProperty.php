@@ -6,6 +6,7 @@ use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Complex\Property;
+use Light\ObjectAccess\Type\Complex\Value;
 
 /**
  * A default implementation of a property.
@@ -16,12 +17,8 @@ use Light\ObjectAccess\Type\Complex\Property;
  * Alternatively, a callback can be specified for a customer setter and/or getter logic.
  *
  */
-class DefaultProperty implements Property
+class DefaultProperty extends AbstractProperty
 {
-	/** @var string */
-	private $name;
-	/** @var string */
-	private $typeName;
 	/** @var bool */
 	private $readable;
 	/** @var bool */
@@ -38,28 +35,9 @@ class DefaultProperty implements Property
 	 */
 	public function __construct($name, $typeName = null)
 	{
-		$this->name = $name;
-		$this->typeName = $typeName;
+		parent::__construct($name, $typeName);
 		$this->readable = true;
 		$this->writable = true;
-	}
-
-	/**
-	 * Returns the name of this property.
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
-	 * Returns the name of this property's type.
-	 * @return string
-	 */
-	public function getTypeName()
-	{
-		return $this->typeName;
 	}
 
 	/**
@@ -85,7 +63,7 @@ class DefaultProperty implements Property
 	 *
 	 * @param ResolvedObject $object
 	 * @throws \Exception        If the property cannot be read.
-	 * @return mixed    the property value
+	 * @return Value	A Value object holding the property value, or an indication that a concrete value is not available.
 	 */
 	public function readProperty(ResolvedObject $object)
 	{
@@ -93,12 +71,12 @@ class DefaultProperty implements Property
 		{
 			if ($this->getter)
 			{
-				return call_user_func($this->getter, $this, $object->getValue());
+				return Value::of(call_user_func($this->getter, $this, $object->getValue()));
 			}
 			else
 			{
 				$wrapped = Helper::wrap($object->getValue());
-				return $wrapped->getValue($this->getName());
+				return Value::of($wrapped->getValue($this->getName()));
 			}
 		}
 		catch (\Exception $e)
