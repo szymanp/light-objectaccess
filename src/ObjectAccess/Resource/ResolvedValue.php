@@ -10,19 +10,10 @@ use Light\ObjectAccess\Type\TypeHelper;
 /**
  * A value read from a resource path.
  */
-abstract class ResolvedValue
+abstract class ResolvedValue extends ResolvedResource
 {
 	/** @var mixed */
 	protected $value;
-	
-	/** @var TypeHelper */
-	protected $typeHelper;
-
-	/** @var ResourceAddress */
-	protected $address;
-
-	/** @var Origin */
-	protected $origin;
 
 	/**
 	 * Creates a new ResolvedValue object appropriate for the given type.
@@ -51,10 +42,8 @@ abstract class ResolvedValue
 
 	public function __construct(TypeHelper $typeHelper, $value, ResourceAddress $address, Origin $origin)
 	{
+		parent::__construct($typeHelper, $address, $origin);
 		$this->value = $value;
-		$this->typeHelper = $typeHelper;
-		$this->address = $address;
-		$this->origin = $origin;
 	}
 
 	/**
@@ -63,40 +52,5 @@ abstract class ResolvedValue
 	public function getValue()
 	{
 		return $this->value;
-	}
-	
-	/**
-	 * Returns the type of the value.
-	 * @return Type
-	 */
-	public function getType()
-	{
-		return $this->typeHelper->getType();
-	}
-
-	/**
-	 * Returns the TypeHelper for the value.
-	 * @return TypeHelper
-	 */
-	public function getTypeHelper()
-	{
-		return $this->typeHelper;
-	}
-
-	/**
-	 * Returns the address of this resource.
-	 * @return ResourceAddress
-	 */
-	public function getAddress()
-	{
-		return $this->address;
-	}
-
-	/**
-	 * @return Origin
-	 */
-	public function getOrigin()
-	{
-		return $this->origin;
 	}
 }
