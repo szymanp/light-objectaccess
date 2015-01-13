@@ -37,7 +37,7 @@ class DefaultNameProvider implements NameProvider
 		}
 		elseif ($type instanceof CollectionType)
 		{
-			return $this->getTypeName($type->getBaseType()) . "[]";
+			return $type->getBaseTypeName() . "[]";
 		}
 		throw new \LogicException();
 	}

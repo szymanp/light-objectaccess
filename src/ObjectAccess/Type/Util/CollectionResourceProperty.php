@@ -1,6 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type\Util;
 
+use Light\Exception\Exception;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Complex\Value;
@@ -47,7 +48,6 @@ class CollectionResourceProperty extends AbstractProperty
 	 */
 	public function writeProperty(ResolvedObject $object, $value, Transaction $transaction)
 	{
-		// TODO: Implement writeProperty() method.
+		throw new Exception("This class does not support writing to properties");
 	}
-
 }

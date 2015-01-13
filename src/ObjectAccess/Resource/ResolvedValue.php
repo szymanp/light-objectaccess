@@ -21,7 +21,7 @@ abstract class ResolvedValue extends ResolvedResource
 	 * @param mixed           $value
 	 * @param ResourceAddress $address
 	 * @param Origin          $origin
-	 * @return ResolvedCollection|ResolvedObject|ResolvedScalar
+	 * @return ResolvedCollectionValue|ResolvedObject|ResolvedScalar
 	 */
 	public static function create(TypeHelper $typeHelper, $value, ResourceAddress $address, Origin $origin)
 	{
@@ -35,7 +35,7 @@ abstract class ResolvedValue extends ResolvedResource
 		}
 		else if ($typeHelper instanceof CollectionTypeHelper)
 		{
-			return new ResolvedCollection($typeHelper, $value, $address, $origin);
+			return new ResolvedCollectionValue($typeHelper, $value, $address, $origin);
 		}
 		throw new \LogicException();
 	}

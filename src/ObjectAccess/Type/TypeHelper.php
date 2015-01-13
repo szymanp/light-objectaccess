@@ -63,4 +63,11 @@ abstract class TypeHelper
 	{
 		return $this->typeRegistry->getNameForType($this->type);
 	}
+
+	/**
+	 * Returns true if the given value is valid for this type.
+	 * @param mixed $value
+	 * @return boolean
+	 */
+	abstract public function isValidValue($value);
 }

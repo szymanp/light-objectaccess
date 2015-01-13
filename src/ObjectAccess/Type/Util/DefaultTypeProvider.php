@@ -4,6 +4,9 @@ namespace Light\ObjectAccess\Type\Util;
 use Light\Exception\Exception;
 use Light\Exception\InvalidParameterValue;
 use Light\Exception\NotImplementedException;
+use Light\ObjectAccess\Type\CollectionType;
+use Light\ObjectAccess\Type\ComplexType;
+use Light\ObjectAccess\Type\SimpleType;
 use Light\ObjectAccess\Type\Type;
 use Light\ObjectAccess\Type\TypeProvider;
 
@@ -96,9 +99,23 @@ class DefaultTypeProvider implements TypeProvider
 
 		foreach($this->types as $type)
 		{
-			if ($type->isValidValue($value))
+			if ($type instanceof CollectionType)
 			{
-				return $type;
+				if ($type->isValidValue($this->getTypeName($type->getBaseTypeName()), $value))
+				{
+					return $type;
+				}
+			}
+			elseif ($type instanceof ComplexType || $type instanceof SimpleType)
+			{
+				if ($type->isValidValue($value))
+				{
+					return $type;
+				}
+			}
+			else
+			{
+				throw new \LogicException();
 			}
 		}
 		return null;

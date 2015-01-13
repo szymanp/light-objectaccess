@@ -29,16 +29,16 @@ class DefaultPropertyTest extends \PHPUnit_Framework_TestCase
 		$ob = new DefaultPropertyTest_TestObject();
 		$ro = ResolvedValue::create(new DefaultPropertyTest_TypeHelper, $ob, EmptyResourceAddress::create(), Origin::unavailable());
 
-		$this->assertEquals($ob->getName(), $this->type->getProperty("name")->readProperty($ro));
-		$this->assertEquals($ob->getSurname(), $this->type->getProperty("surname")->readProperty($ro));
-		$this->assertEquals($ob->age, $this->type->getProperty("age")->readProperty($ro));
+		$this->assertEquals($ob->getName(), $this->type->getProperty("name")->readProperty($ro)->getValue());
+		$this->assertEquals($ob->getSurname(), $this->type->getProperty("surname")->readProperty($ro)->getValue());
+		$this->assertEquals($ob->age, $this->type->getProperty("age")->readProperty($ro)->getValue());
 
 		$this->type->getProperty("name")->writeProperty($ro, "Max", new DummyTransaction());
 		$this->assertEquals("Max", $ob->getName());
 	}
 
 	/**
-	 * @expectedException Light\ObjectAccess\Exception\ResourceException
+	 * @expectedException \Light\ObjectAccess\Exception\ResourceException
 	 */
 	public function testMissingProperty()
 	{
@@ -48,7 +48,6 @@ class DefaultPropertyTest extends \PHPUnit_Framework_TestCase
 
 		$prop->readProperty($ro);
 	}
-
 }
 
 class DefaultPropertyTest_TypeHelper extends ComplexTypeHelper

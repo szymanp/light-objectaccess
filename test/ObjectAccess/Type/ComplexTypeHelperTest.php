@@ -2,6 +2,8 @@
 namespace Light\ObjectAccess\Type;
 
 use Light\ObjectAccess\Resource\Origin;
+use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
+use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedScalar;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
@@ -40,7 +42,7 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 
 	public function testReadProperty()
 	{
-		$typeHelper = $this->typeRegistry->getTypeHelperByName(Author::class);
+		$typeHelper = $this->typeRegistry->getComplexTypeHelper(Author::class);
 
 		$database = new Database();
 		$author = $database->getAnyAuthor();
@@ -62,5 +64,23 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotEquals("James Bond", $author->name);
 		$resolved->getTypeHelper()->writeProperty($resolved, "name", "James Bond", $transaction);
 		$this->assertEquals("James Bond", $author->name);
+	}
+
+	public function testReadCollectionResourceProperty()
+	{
+		$typeHelper = $this->typeRegistry->getComplexTypeHelper(Author::class);
+
+		$database = new Database();
+		$author = $database->getAnyAuthor();
+		$resolvedAuthor = ResolvedValue::create($typeHelper, $author, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$resolvedPosts = $typeHelper->readProperty($resolvedAuthor, "posts");
+		$this->assertInstanceOf(ResolvedCollectionResource::class, $resolvedPosts);
+
+		$origin = $resolvedPosts->getOrigin();
+		$this->assertInstanceOf(Origin_PropertyOfObject::class, $origin);
+
+		$this->assertSame($resolvedAuthor, $origin->getObject());
+		$this->assertEquals("posts", $origin->getPropertyName());
 	}
 }

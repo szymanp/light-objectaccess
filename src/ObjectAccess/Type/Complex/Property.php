@@ -35,7 +35,7 @@ interface Property
 	 *
 	 * @param ResolvedObject    $object
 	 * @throws \Exception		If the property cannot be read.
-	 * @return mixed	the property value
+	 * @return Value	A Value object holding the property value, or an indication that a concrete value is not available.
 	 */
 	public function readProperty(ResolvedObject $object);
 

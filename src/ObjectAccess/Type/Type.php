@@ -6,10 +6,4 @@ namespace Light\ObjectAccess\Type;
  */
 interface Type
 {
-	/**
-	 * Returns true if the given value can be handled by this type.
-	 * @param mixed	$value
-	 * @return boolean
-	 */
-	public function isValidValue($value);
 }

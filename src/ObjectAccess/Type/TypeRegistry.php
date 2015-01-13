@@ -93,6 +93,54 @@ class TypeRegistry
 	}
 
 	/**
+	 * Returns a SimpleTypeHelper for the named type.
+	 * @param string $name
+	 * @return SimpleTypeHelper
+	 * @throws TypeException
+	 */
+	public function getSimpleTypeHelper($name)
+	{
+		$helper = $this->getTypeHelperByName($name);
+		if (!($helper instanceof SimpleTypeHelper))
+		{
+			throw new TypeException("Type \"%1\" does not resolve to a SimpleType", $name);
+		}
+		return $helper;
+	}
+
+	/**
+	 * Returns a ComplexTypeHelper for the named type.
+	 * @param string $name
+	 * @return ComplexTypeHelper
+	 * @throws TypeException
+	 */
+	public function getComplexTypeHelper($name)
+	{
+		$helper = $this->getTypeHelperByName($name);
+		if (!($helper instanceof ComplexTypeHelper))
+		{
+			throw new TypeException("Type \"%1\" does not resolve to a ComplexType", $name);
+		}
+		return $helper;
+	}
+
+	/**
+	 * Returns a CollectionTypeHelper for the named type.
+	 * @param string $name
+	 * @return CollectionTypeHelper
+	 * @throws TypeException
+	 */
+	public function getCollectionTypeHelper($name)
+	{
+		$helper = $this->getTypeHelperByName($name);
+		if (!($helper instanceof CollectionTypeHelper))
+		{
+			throw new TypeException("Type \"%1\" does not resolve to a CollectionType", $name);
+		}
+		return $helper;
+	}
+
+	/**
 	 * Returns a {@link ResolvedValue} object for the given value.
 	 *
 	 * The value is resolved with no address and no origin.

@@ -26,4 +26,11 @@ interface ComplexType extends Type
 	 * @return string
 	 */
 	public function getClassName();
+
+	/**
+	 * Returns true if the given value can be handled by this type.
+	 * @param mixed	$value
+	 * @return boolean
+	 */
+	public function isValidValue($value);
 }

@@ -2,6 +2,7 @@
 namespace Light\ObjectAccess\TestData;
 
 use Light\ObjectAccess\Type\TypeRegistry;
+use Light\ObjectAccess\Type\Util\DefaultCollectionType;
 use Light\ObjectAccess\Type\Util\DefaultComplexType;
 use Light\ObjectAccess\Type\Util\DefaultTypeProvider;
 
@@ -19,6 +20,7 @@ class Setup
 		$provider = new DefaultTypeProvider();
 		$provider->addType(Author::createType());
 		$provider->addType(Post::createType());
+		$provider->addType(new DefaultCollectionType("Post"));
 
 		return new TypeRegistry($provider);
 	}
