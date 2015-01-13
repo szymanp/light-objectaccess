@@ -9,6 +9,31 @@ use Light\ObjectAccess\Type\Type;
 
 class DefaultNameProvider implements NameProvider
 {
+	/** @var string */
+	private $prefix;
+
+	/**
+	 * Returns the class prefix that will be stripped from class names.
+	 * @return string
+	 */
+	public function getPrefix()
+	{
+		return $this->prefix;
+	}
+
+	/**
+	 * Sets the class prefix that will be stripped from class names.
+	 *
+	 * For example, if the prefix is set to "Application\Model", then the name for the class
+	 * "Application\Model\User" would be "User".
+	 *
+	 * @param string $prefix
+	 */
+	public function setPrefix($prefix)
+	{
+		$this->prefix = $prefix;
+	}
+
 	/**
 	 * Returns the URI for the given type.
 	 * @param Type $type
@@ -33,12 +58,25 @@ class DefaultNameProvider implements NameProvider
 		}
 		elseif ($type instanceof ComplexType)
 		{
-			return $type->getClassName();
+			return $this->stripPrefix($type->getClassName());
 		}
 		elseif ($type instanceof CollectionType)
 		{
 			return $type->getBaseTypeName() . "[]";
 		}
 		throw new \LogicException();
+	}
+
+	private function stripPrefix($name)
+	{
+		if (!is_null($this->prefix)
+			&& substr($name, 0, strlen($this->prefix) + 1) == $this->prefix + "\\")
+		{
+			return substr($name, strlen($this->prefix) + 1);
+		}
+		else
+		{
+			return $name;
+		}
 	}
 }

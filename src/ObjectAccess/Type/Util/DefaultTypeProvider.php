@@ -25,6 +25,19 @@ class DefaultTypeProvider implements TypeProvider
 	}
 
 	/**
+	 * Sets the class prefix that will be stripped from class names.
+	 *
+	 * For example, if the prefix is set to "Application\Model", then the name for the class
+	 * "Application\Model\User" would be "User".
+	 *
+	 * @param string $prefix
+	 */
+	public function setNamePrefix($prefix)
+	{
+		$this->nameProvider->setPrefix($prefix);
+	}
+
+	/**
 	 * Register a new type with this provider.
 	 * @param Type $type
 	 * @param string $name

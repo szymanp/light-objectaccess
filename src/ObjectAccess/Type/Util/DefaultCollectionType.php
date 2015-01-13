@@ -23,16 +23,14 @@ class DefaultCollectionType implements CollectionType
 
 	/**
 	 * Returns the type name of items in this collection.
+	 * @internal	baseTypeName is unlike phpType in SimpleType and className in ComplexType
+	 * 				because the others can be resolved without involving the TypeRegistry.
 	 * @return string
 	 */
 	public function getBaseTypeName()
 	{
 		return $this->baseTypeName;
 	}
-
-	// NOTE:
-	// baseTypeName is unlike phpType in SimpleType and className in ComplexType
-	// because the others can be resolved without involving the TypeRegistry.
 
 	/**
 	 * Returns an element from the given collection at the specified offset.

@@ -16,11 +16,11 @@ class Author
 	 */
 	public static function createType()
 	{
-		$type = new DefaultComplexType("Light\ObjectAccess\TestData\Author");
+		$type = new DefaultComplexType(Author::class);
 		$type->addProperty(new DefaultProperty("id", "int"));
 		$type->addProperty(new DefaultProperty("name"));
 		$type->addProperty(new DefaultProperty("age"));
-		$type->addProperty(new CollectionResourceProperty("posts", "Post[]"));
+		$type->addProperty(new CollectionResourceProperty("posts", Post::class . "[]"));
 		return $type;
 	}
 }

@@ -20,7 +20,7 @@ class Setup
 		$provider = new DefaultTypeProvider();
 		$provider->addType(Author::createType());
 		$provider->addType(Post::createType());
-		$provider->addType(new DefaultCollectionType("Post"));
+		$provider->addType(new DefaultCollectionType(Post::class));
 
 		return new TypeRegistry($provider);
 	}
