@@ -2,7 +2,10 @@
 namespace Light\ObjectAccess\Type\Util;
 
 use Light\Exception\Exception;
+use Light\Exception\InvalidReturnValue;
 use Light\ObjectAccess\Exception\ResourceException;
+use Light\ObjectAccess\Resource\ResolvedCollectionResource;
+use Light\ObjectAccess\Resource\ResolvedCollectionValue;
 use Light\ObjectAccess\Type\Collection\Element;
 use Light\ObjectAccess\Type\CollectionType;
 use Light\ObjectAccess\Resource\ResolvedCollection;
@@ -15,6 +18,9 @@ class DefaultCollectionType implements CollectionType
 {
 	/** @var string */
 	private $baseTypeName;
+
+	/** @var \Closure */
+	private $elementGetter;
 
 	public function __construct($baseTypeName)
 	{
@@ -38,35 +44,55 @@ class DefaultCollectionType implements CollectionType
 	 * @param string|integer     $key
 	 * @return Element
 	 * @throws ResourceException	If the collection does not support reading element values.
+	 * @throws Exception
 	 */
 	public function getElementAtOffset(ResolvedCollection $coll, $key)
 	{
-		// FIXME
-		$value = $coll->getValue();
+		if ($coll instanceof ResolvedCollectionResource)
+		{
+			// The resolved resource does not have any values.
+			if (is_null($this->elementGetter))
+			{
+				throw new Exception("No element getter defined for this type");
+			}
 
-		if (is_array($value))
-		{
-			if (isset($value[$key]))
+			$result = call_user_func($this->elementGetter, $coll, $key);
+			if (!($result instanceof Element))
 			{
-				return Element::value($value[$key]);
+				throw new InvalidReturnValue("Closure", "", $result, "Expected Element object");
 			}
-			else
-			{
-				return Element::notExists();
-			}
+			return $result;
 		}
-		else if ($value instanceof \ArrayAccess)
+		elseif ($coll instanceof ResolvedCollectionValue)
 		{
-			if ($value->offsetExists($key))
+			// The value can be read directly from the resolved resource.
+			$value = $coll->getValue();
+
+			if (is_array($value))
 			{
-				return Element::value($value->offsetGet($key));
+				if (isset($value[$key]))
+				{
+					return Element::value($value[$key]);
+				}
+				else
+				{
+					return Element::notExists();
+				}
 			}
-			else
+			else if ($value instanceof \ArrayAccess)
 			{
-				return Element::notExists();
+				if ($value->offsetExists($key))
+				{
+					return Element::value($value->offsetGet($key));
+				}
+				else
+				{
+					return Element::notExists();
+				}
 			}
+			throw new ResourceException("Value is neither an array nor an ArrayAccess object");
 		}
-		throw new ResourceException("Value is neither an array nor an ArrayAccess object");
+		throw new \LogicException();
 	}
 
 	/**
@@ -95,4 +121,14 @@ class DefaultCollectionType implements CollectionType
 		}
 		return false;
 	}
+
+	/**
+	 * Sets the callback for reading elements of this type.
+	 * @param callable $elementGetter	A function of the form: function(ResolvedCollection $coll, $key) => Element.
+	 */
+	public function setElementGetter($elementGetter)
+	{
+		$this->elementGetter = $elementGetter;
+	}
+
 }
