@@ -20,7 +20,7 @@ class TypeRegistryTest extends \PHPUnit_Framework_TestCase
 	public function testGetTypeHelperByName()
 	{
 		$stringType = $this->registry->getTypeHelperByName("string");
-		$this->assertInstanceOf(SimpleTypeHelper::CLASSNAME, $stringType);
+		$this->assertInstanceOf(SimpleTypeHelper::class, $stringType);
 		$this->assertEquals("string", $stringType->getType()->getPhpType());
 	}
 
