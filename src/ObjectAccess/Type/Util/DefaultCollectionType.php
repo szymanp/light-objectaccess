@@ -39,14 +39,14 @@ class DefaultCollectionType implements CollectionType
 	}
 
 	/**
-	 * Returns an element from the given collection at the specified offset.
+	 * Returns an element from the given collection at the specified key.
 	 * @param ResolvedCollection $coll
 	 * @param string|integer     $key
 	 * @return Element
 	 * @throws ResourceException	If the collection does not support reading element values.
 	 * @throws Exception
 	 */
-	public function getElementAtOffset(ResolvedCollection $coll, $key)
+	public function getElementAtKey(ResolvedCollection $coll, $key)
 	{
 		if ($coll instanceof ResolvedCollectionResource)
 		{
@@ -72,7 +72,7 @@ class DefaultCollectionType implements CollectionType
 			{
 				if (isset($value[$key]))
 				{
-					return Element::value($value[$key]);
+					return Element::valueOf($value[$key]);
 				}
 				else
 				{
@@ -83,7 +83,7 @@ class DefaultCollectionType implements CollectionType
 			{
 				if ($value->offsetExists($key))
 				{
-					return Element::value($value->offsetGet($key));
+					return Element::valueOf($value->offsetGet($key));
 				}
 				else
 				{

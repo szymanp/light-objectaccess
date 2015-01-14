@@ -68,7 +68,7 @@ class Database
 	 */
 	public function getAuthor($id)
 	{
-		return $this->authors[$id];
+		return @ $this->authors[$id];
 	}
 
 	/**
@@ -77,7 +77,7 @@ class Database
 	 */
 	public function getPost($id)
 	{
-		return $this->posts[$id];
+		return @ $this->posts[$id];
 	}
 
 	/**

@@ -1,6 +1,10 @@
 <?php
 namespace Light\ObjectAccess\Resource;
 
+use Light\ObjectAccess\Resource\Addressing\ResourceAddress;
+use Light\ObjectAccess\Type\CollectionType;
+use Light\ObjectAccess\Type\CollectionTypeHelper;
+
 interface ResolvedCollection
 {
 	/**
@@ -13,4 +17,15 @@ interface ResolvedCollection
 	 * @return CollectionTypeHelper
 	 */
 	public function getTypeHelper();
+
+	/**
+	 * Returns the address of this resource.
+	 * @return ResourceAddress
+	 */
+	public function getAddress();
+
+	/**
+	 * @return Origin
+	 */
+	public function getOrigin();
 }

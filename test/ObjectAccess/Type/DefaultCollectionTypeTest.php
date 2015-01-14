@@ -19,7 +19,7 @@ class DefaultCollectionTypeTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->typeRegistry = Setup::getTypeRegistry();
+		$this->typeRegistry = Setup::create()->getTypeRegistry();
 	}
 
 	public function testIsValidValue()
@@ -34,7 +34,7 @@ class DefaultCollectionTypeTest extends \PHPUnit_Framework_TestCase
 		$this->assertTrue($type->isValidValue($this->typeRegistry, $arrayObject));
 	}
 
-	public function testGetElementAtOffsetFromArray()
+	public function testGetElementAtKeyFromArray()
 	{
 		$typeHelper = $this->typeRegistry->getCollectionTypeHelper(Post::class . "[]");
 		$type = $typeHelper->getType();
@@ -42,12 +42,12 @@ class DefaultCollectionTypeTest extends \PHPUnit_Framework_TestCase
 		$array = array(new Post(), new Post());
 		$resolvedCollectionValue = new ResolvedCollectionValue($typeHelper, $array, EmptyResourceAddress::create(), Origin::unavailable());
 
-		$value = $type->getElementAtOffset($resolvedCollectionValue, 0);
+		$value = $type->getElementAtKey($resolvedCollectionValue, 0);
 		$this->assertInstanceOf(Element::class, $value);
 		$this->assertTrue($value->exists());
-		$this->assertSame($array[0], $value->getValue());
+		$this->assertSame($array[0], $value->getValue()->getValue());
 
-		$value = $type->getElementAtOffset($resolvedCollectionValue, 3);
+		$value = $type->getElementAtKey($resolvedCollectionValue, 3);
 		$this->assertInstanceOf(Element::class, $value);
 		$this->assertFalse($value->exists());
 	}

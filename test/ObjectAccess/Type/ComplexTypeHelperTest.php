@@ -16,6 +16,8 @@ include_once("test/ObjectAccess/TestData/Setup.php");
 
 class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 {
+	/** @var Setup */
+	private $setup;
 	/** @var TypeRegistry */
 	private $typeRegistry;
 
@@ -23,7 +25,8 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->typeRegistry = Setup::getTypeRegistry();
+		$this->setup = Setup::create();
+		$this->typeRegistry = $this->setup->getTypeRegistry();
 	}
 
 	public function testGetName()
@@ -44,7 +47,7 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 	{
 		$typeHelper = $this->typeRegistry->getComplexTypeHelper(Author::class);
 
-		$database = new Database();
+		$database = $this->setup->getDatabase();
 		$author = $database->getAnyAuthor();
 		$resolvedAuthor = ResolvedValue::create($typeHelper, $author, EmptyResourceAddress::create(), Origin::unavailable());
 
@@ -55,7 +58,7 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 
 	public function testWriteProperty()
 	{
-		$database = new Database();
+		$database = $this->setup->getDatabase();
 		$transaction = new DummyTransaction();
 
 		$author = $database->getAnyAuthor();
@@ -70,7 +73,7 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 	{
 		$typeHelper = $this->typeRegistry->getComplexTypeHelper(Author::class);
 
-		$database = new Database();
+		$database = $this->setup->getDatabase();
 		$author = $database->getAnyAuthor();
 		$resolvedAuthor = ResolvedValue::create($typeHelper, $author, EmptyResourceAddress::create(), Origin::unavailable());
 

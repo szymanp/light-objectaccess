@@ -1,11 +1,16 @@
 <?php
 namespace Light\ObjectAccess\Type\Collection;
 
+use Light\ObjectAccess\Type\Complex\Value;
+
+/**
+ * A wrapper for an element in a collection.
+ */
 final class Element
 {
 	/** @var boolean */
 	private $exists;
-	/** @var mixed */
+	/** @var Value */
 	private $value;
 
 	/**
@@ -21,15 +26,25 @@ final class Element
 
 	/**
 	 * A collection element.
-	 * @param mixed	$value
+	 * @param Value	$value	The wrapped value.
 	 * @return Element
 	 */
-	public static function value($value)
+	public static function value(Value $value)
 	{
 		$element = new self;
 		$element->exists = true;
 		$element->value = $value;
 		return $element;
+	}
+
+	/**
+	 * A collection element.
+	 * @param mixed $value	The actual value.
+	 * @return Element
+	 */
+	public static function valueOf($value)
+	{
+		return self::value(Value::of($value));
 	}
 
 	private function __construct()
@@ -48,7 +63,7 @@ final class Element
 
 	/**
 	 * Returns the value of this element.
-	 * @return mixed
+	 * @return Value
 	 */
 	public function getValue()
 	{

@@ -13,12 +13,12 @@ interface CollectionType extends Type
 	public function getBaseTypeName();
 
 	/**
-	 * Returns an element from the given collection at the specified offset.
+	 * Returns an element from the given collection at the specified key.
 	 * @param ResolvedCollection 	$coll
 	 * @param string|integer		$key
 	 * @return Element
 	 */
-	public function getElementAtOffset(ResolvedCollection $coll, $key);
+	public function getElementAtKey(ResolvedCollection $coll, $key);
 
 	/**
 	 * Returns true if the given value can be handled by this type.

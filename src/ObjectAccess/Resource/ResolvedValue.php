@@ -48,6 +48,7 @@ abstract class ResolvedValue extends ResolvedResource
 
 	/**
 	 * Returns the value.
+	 * @return mixed
 	 */
 	public function getValue()
 	{

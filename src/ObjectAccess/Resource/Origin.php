@@ -19,11 +19,11 @@ abstract class Origin
 
 	/**
 	 * The resource was obtained from an element in a collection.
-	 * @param ResolvedCollectionValue $collection
+	 * @param ResolvedCollection $collection
 	 * @param mixed              $key
 	 * @return Origin_ElementInCollection
 	 */
-	public static function elementInCollection(ResolvedCollectionValue $collection, $key)
+	public static function elementInCollection(ResolvedCollection $collection, $key)
 	{
 		return new Origin_ElementInCollection($collection, $key);
 	}
@@ -46,18 +46,18 @@ final class Origin_Unavailable extends Origin
 
 final class Origin_ElementInCollection extends Origin
 {
-	/** @var ResolvedCollectionValue */
+	/** @var ResolvedCollection */
 	private $collection;
 	private $key;
 
-	protected function __construct(ResolvedCollectionValue $collection, $key)
+	protected function __construct(ResolvedCollection $collection, $key)
 	{
 		$this->collection = $collection;
 		$this->key = $key;
 	}
 
 	/**
-	 * @return ResolvedCollectionValue
+	 * @return ResolvedCollection
 	 */
 	public function getCollection()
 	{

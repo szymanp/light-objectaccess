@@ -12,164 +12,111 @@ use Light\Exception\Exception;
  * Scope can also be passed inside the body of the request. Then it is parsed by an appropriate format handler,
  * e.g. JsonScopeReader.
  */
-class Scope
+abstract class Scope
 {
-	// Scope is a container for restrictions and ordering on a collection.
-
-	const WITH_INDEX = 1;
-	const WITH_KEY = 2;
-	const WITH_VALUE = 3;
-	const WITH_QUERY = 4;
-
-	/** @var integer */
-	private $method;
-	/** @var integer */
-	private $index;
-	/** @var string */
-	private $key;
-	/** @var mixed */
-	private $value;
-	/** @var WhereExpressionSource */
-	private $query;
-
-	/** @var integer */
-	private $count;
-	/** @var integer */
-	private $offset;
-
 	/**
-	 * Returns an empty Scope object.
+	 * A scope that places no restrictions on the collection.
 	 * @return Scope
 	 */
 	public static function createEmptyScope()
 	{
-		return new self();
+		return new Scope_Empty();
 	}
 
 	/**
-	 * Returns the method to use for filtering the collection.
-	 * @return int	One of the WITH_* constants.
+	 * A scope that identifies an element by its ordinal index.
+	 * @param integer $index
+	 * @return Scope
 	 */
-	public function getMethod()
+	public static function createWithIndex($index)
 	{
-		return $this->method;
+		return new Scope_Index($index);
 	}
 
 	/**
+	 * A scope that uniquely identifies an element by its key.
+	 * @param mixed $key
+	 * @return Scope
+	 */
+	public static function createWithKey($key)
+	{
+		return new Scope_Key($key);
+	}
+
+	protected function __construct()
+	{
+		// Empty
+	}
+}
+
+/**
+ * A scope that places no restrictions on the collection.
+ */
+final class Scope_Empty extends Scope
+{
+
+}
+
+/**
+ * A scope that identifies an element by its ordinal index.
+ */
+final class Scope_Index extends Scope
+{
+	/** @var integer */
+	private $index;
+
+	protected function __construct($index)
+	{
+		$this->index = (int)$index;
+	}
+
+	/**
+	 * Returns the ordinal index of the element in the collection.
 	 * @return int
 	 */
 	public function getIndex()
 	{
 		return $this->index;
 	}
+}
 
-	/**
-	 * @param int $index
-	 */
-	public function setIndex($index)
+/**
+ * A scope that uniquely identifies an element by its key.
+ */
+final class Scope_Key extends Scope
+{
+	/** @var integer|string */
+	private $key;
+
+	protected function __construct($key)
 	{
-		$this->index = $index;
-		$this->method = self::WITH_INDEX;
+		$this->key = $key;
 	}
 
 	/**
-	 * @return string
+	 * @return int|string
 	 */
 	public function getKey()
 	{
 		return $this->key;
 	}
+}
 
-	/**
-	 * @param string $key
-	 */
-	public function setKey($key)
-	{
-		$this->key = $key;
-		$this->method == self::WITH_KEY;
-	}
+/**
+ * A scope that uniquely identifies an element by its value.
+ */
+final class Scope_Value extends Scope
+{
+	// TODO
+}
 
-	/**
-	 * @return WhereExpressionSource
-	 */
-	public function getQuery()
-	{
-		return $this->query;
-	}
-
-	/**
-	 * @return WhereExpression
-	 */
-	public function getCompiledQuery()
-	{
-		if (is_null($this->query))
-		{
-			return null;
-		}
-		else if ($this->query instanceof WhereExpression)
-		{
-			return $this->query;
-		}
-		throw new Exception("Compiled query is not available");
-	}
-
-	/**
-	 * @param WhereExpressionSource $query
-	 */
-	public function setQuery(WhereExpressionSource $query)
-	{
-		$this->query = $query;
-		$this->method = self::WITH_QUERY;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getValue()
-	{
-		return $this->value;
-	}
-
-	/**
-	 * @param mixed $value
-	 */
-	public function setValue($value)
-	{
-		$this->value = $value;
-		$this->method = self::WITH_VALUE;
-	}
-
-	/**
-	 * Returns the maximum number of elements to retrieve from the collection.
-	 * @return int
-	 */
-	public function getCount()
-	{
-		return $this->count;
-	}
-
-	/**
-	 * @param int $count
-	 */
-	public function setCount($count)
-	{
-		$this->count = $count;
-	}
-
-	/**
-	 * Returns the offset of the first element to retrieve from the collection.
-	 * @return int
-	 */
-	public function getOffset()
-	{
-		return $this->offset;
-	}
-
-	/**
-	 * @param int $offset
-	 */
-	public function setOffset($offset)
-	{
-		$this->offset = $offset;
-	}
-} 
+/**
+ * A scope that identifies zero or more elements in a collection by a query expression.
+ */
+final class Scope_Query extends Scope
+{
+	private $query;
+	private $offset;
+	private $count;
+	// TODO
+}
