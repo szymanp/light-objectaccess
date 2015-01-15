@@ -8,6 +8,7 @@ use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\TestData\Post;
 use Light\ObjectAccess\TestData\Setup;
+use Light\ObjectAccess\Transaction\Util\DummyTransaction;
 
 include_once("test/ObjectAccess/TestData/Setup.php");
 
@@ -43,5 +44,18 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($this->setup->getDatabase()->getPost(4040), $result->getValue());
 
 		$this->assertNull($helper->getElementAtKey($coll, 1234));
+	}
+
+	public function testAppendingWithNoOrigin()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$post = new Post();
+		$post->setId(5050);
+		$helper->appendValue($coll, $post, new DummyTransaction());
+
+		$this->assertSame($post, $this->setup->getDatabase()->getPost(5050));
 	}
 }

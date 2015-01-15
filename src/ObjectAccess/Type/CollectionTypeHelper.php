@@ -2,11 +2,14 @@
 namespace Light\ObjectAccess\Type;
 
 use Light\Exception\NotImplementedException;
+use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
+use Light\ObjectAccess\Transaction\Transaction;
+use Light\ObjectAccess\Type\Collection\Append;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Type\Complex\Value_Unavailable;
 
@@ -83,6 +86,25 @@ class CollectionTypeHelper extends TypeHelper
 		{
 			// The element does not exist.
 			return null;
+		}
+	}
+
+	/**
+	 * Appends a value to the collection.
+	 * @param ResolvedCollection $collection
+	 * @param mixed              $value
+	 * @param Transaction        $transaction
+	 * @throws TypeException	 If the type does not support appending.
+	 */
+	public function appendValue(ResolvedCollection $collection, $value, Transaction $transaction)
+	{
+		if ($this->type instanceof Append)
+		{
+			$this->type->appendValue($collection, $value, $transaction);
+		}
+		else
+		{
+			throw new TypeException("Type %1 does not support appending", $this->getName());
 		}
 	}
 }

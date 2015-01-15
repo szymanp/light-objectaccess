@@ -1,9 +1,11 @@
 <?php
 namespace Light\ObjectAccess\TestData;
 
+use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Resource\Origin_Unavailable;
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
+use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Collection\Append;
 use Light\ObjectAccess\Type\Collection\Element;
 use Light\ObjectAccess\Type\Util\DefaultCollectionType;
@@ -24,10 +26,18 @@ class PostCollectionType extends DefaultCollectionType implements Append
 	 * Appends a value to the collection
 	 * @param ResolvedCollection $collection
 	 * @param mixed              $value
+	 * @param Transaction		 $transaction
 	 */
-	public function appendValue(ResolvedCollection $collection, $value)
+	public function appendValue(ResolvedCollection $collection, $value, Transaction $transaction)
 	{
-		// TODO: Implement appendValue() method.
+		if ($collection->getOrigin() instanceof Origin_Unavailable)
+		{
+			$this->database->addPost($value);
+		}
+		else
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	protected function getElementAtKeyFromResource(ResolvedCollectionResource $coll, $key)
@@ -43,6 +53,10 @@ class PostCollectionType extends DefaultCollectionType implements Append
 			{
 				return Element::valueOf($value);
 			}
+		}
+		else
+		{
+			throw new NotImplementedException();
 		}
 	}
 
