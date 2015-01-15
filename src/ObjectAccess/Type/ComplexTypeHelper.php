@@ -7,6 +7,7 @@ use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedObject;
+use Light\ObjectAccess\Resource\ResolvedResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
@@ -49,7 +50,7 @@ class ComplexTypeHelper extends TypeHelper
 	 * @param ResolvedObject	$resource
 	 * @param string        	$propertyName
 	 * @throws \Exception	If the property doesn't exist or cannot be read.
-	 * @return ResolvedValue	the property value
+	 * @return ResolvedResource	the property value
 	 */
 	public function readProperty(ResolvedObject $resource, $propertyName)
 	{
