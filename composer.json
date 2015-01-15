@@ -1,9 +1,9 @@
 {
     "name": "light/objectaccess",
-    "description": "Light Object Access",
+    "description": "A library for programmatic CRUD operations on arbitrary objects",
     "homepage": "https://github.com/szymanp/light-objectaccess",
     "type": "library",
-    "license": "GPL-3.0+",
+    "license": "MIT",
     "authors": [
         {
             "name": "Piotr Szymanski",
