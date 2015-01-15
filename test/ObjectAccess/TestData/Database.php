@@ -62,6 +62,15 @@ class Database
 		$this->authors[$author->id] = $author;
 	}
 
+	public function removeAuthor(Author $author)
+	{
+		$key = array_search($author, $this->authors, true);
+		if ($key !== false)
+		{
+			unset($this->authors[$key]);
+		}
+	}
+
 	/**
 	 * @param $id
 	 * @return Author

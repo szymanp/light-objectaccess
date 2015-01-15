@@ -50,13 +50,7 @@ class DefaultCollectionType implements CollectionType
 	{
 		if ($coll instanceof ResolvedCollectionResource)
 		{
-			// The resolved resource does not have any values.
-			if (is_null($this->elementGetter))
-			{
-				throw new Exception("No element getter defined for this type");
-			}
-
-			$result = call_user_func($this->elementGetter, $coll, $key);
+			$result = $this->getElementAtKeyFromResource($coll, $key);
 			if (!($result instanceof Element))
 			{
 				throw new InvalidReturnValue("Closure", "", $result, "Expected Element object");
@@ -123,7 +117,7 @@ class DefaultCollectionType implements CollectionType
 	}
 
 	/**
-	 * Sets the callback for reading elements of this type.
+	 * Sets the callback for reading elements from collections of this type.
 	 * @param callable $elementGetter	A function of the form: function(ResolvedCollection $coll, $key) => Element.
 	 */
 	public function setElementGetter($elementGetter)
@@ -131,4 +125,21 @@ class DefaultCollectionType implements CollectionType
 		$this->elementGetter = $elementGetter;
 	}
 
+	/**
+	 * Returns an element from the given collection resource at the specified key.
+	 * @param ResolvedCollectionResource $coll
+	 * @param string|integer     		 $key
+	 * @return Element
+	 * @throws Exception
+	 */
+	protected function getElementAtKeyFromResource(ResolvedCollectionResource $coll, $key)
+	{
+		// The resolved resource does not have any values.
+		if (is_null($this->elementGetter))
+		{
+			throw new Exception("No element getter defined for this type");
+		}
+
+		return call_user_func($this->elementGetter, $coll, $key);
+	}
 }

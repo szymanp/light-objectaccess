@@ -12,6 +12,7 @@ use Light\ObjectAccess\Type\Util\DefaultTypeProvider;
 include_once("Author.php");
 include_once("Post.php");
 include_once("Database.php");
+include_once("PostCollectionType.php");
 
 class Setup
 {
@@ -59,40 +60,8 @@ class Setup
 		$provider = new DefaultTypeProvider();
 		$provider->addType(Author::createType());
 		$provider->addType(Post::createType());
-		$provider->addType($this->createPostCollectionType());
+		$provider->addType(new PostCollectionType($this->database));
 
 		return new TypeRegistry($provider);
-	}
-
-	private function createPostCollectionType()
-	{
-		$type = new DefaultCollectionType(Post::class);
-
-		$db = $this->database;
-
-		$type->setElementGetter(function(ResolvedCollection $coll, $key) use ($db)
-		{
-			if ($coll instanceof ResolvedCollectionResource)
-			{
-				if ($coll->getOrigin() instanceof Origin_Unavailable)
-				{
-					$value = $db->getPost($key);
-					if (is_null($value))
-					{
-						return Element::notExists();
-					}
-					else
-					{
-						return Element::valueOf($value);
-					}
-				}
-			}
-			else
-			{
-				throw new \NotImplementedException();
-			}
-		});
-
-		return $type;
 	}
 }
