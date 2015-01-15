@@ -1,15 +1,18 @@
 <?php 
 namespace Light\ObjectAccess\Type\Collection;
 
-use Light\ObjectService\Resource\Query\Scope;
+use Light\ObjectAccess\Resource\ResolvedCollection;
+use Light\ObjectAccess\Query\Scope;
+use Light\ObjectAccess\Type\Complex\Value;
 
 interface Search
 {
 	/**
 	 * Returns all objects matching the scope.
-	 * @param Scope		$scope
-	 * @param SearchContext	$context
-	 * @return object[]
+	 * @param ResolvedCollection 	$collection
+	 * @param Scope					$scope
+	 * @param SearchContext			$context
+	 * @return Value[]
 	 */
-	public function find(Scope $scope, SearchContext $context);
+	public function find(ResolvedCollection $collection, Scope $scope, SearchContext $context);
 }
