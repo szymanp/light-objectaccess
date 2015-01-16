@@ -52,6 +52,19 @@ class Database
 		return $this->authors;
 	}
 
+	public function getPostsForAuthor(Author $author)
+	{
+		$posts = array();
+		foreach($this->posts as $post)
+		{
+			if ($post->getAuthor() === $author)
+			{
+				$posts[] = $post;
+			}
+		}
+		return $posts;
+	}
+
 	public function addPost(Post $post)
 	{
 		$this->posts[$post->getId()] = $post;

@@ -1,7 +1,9 @@
 <?php
 namespace Light\ObjectAccess\TestData;
 
+use Light\Exception\Exception;
 use Light\Exception\NotImplementedException;
+use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
 use Light\ObjectAccess\Resource\Origin_Unavailable;
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
@@ -42,7 +44,9 @@ class PostCollectionType extends DefaultCollectionType implements Append
 
 	protected function getElementAtKeyFromResource(ResolvedCollectionResource $coll, $key)
 	{
-		if ($coll->getOrigin() instanceof Origin_Unavailable)
+		$origin = $coll->getOrigin();
+
+		if ($origin instanceof Origin_Unavailable)
 		{
 			$value = $this->database->getPost($key);
 			if (is_null($value))
@@ -54,9 +58,31 @@ class PostCollectionType extends DefaultCollectionType implements Append
 				return Element::valueOf($value);
 			}
 		}
+		elseif ($origin instanceof Origin_PropertyOfObject)
+		{
+			$object = $origin->getObject()->getValue();
+			if ($object instanceof Author && $origin->getPropertyName() == "posts")
+			{
+				$posts = $this->database->getPostsForAuthor($object);
+				if (isset($posts[$key]))
+				{
+					return Element::valueOf($posts[$key]);
+				}
+				else
+				{
+					return Element::notExists();
+				}
+			}
+			else
+			{
+				throw new Exception("PostCollectionType only supports Author objects, not %1::%2",
+									get_class($origin->getObject()),
+									$origin->getPropertyName());
+			}
+		}
 		else
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("Origin is " . get_class($origin));
 		}
 	}
 

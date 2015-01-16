@@ -43,7 +43,7 @@ class RelativeAddressReader
 				$addr = $resource->getAddress()->hasStringForm() ? '"' . $resource->getAddress()->getAsString() . '"' : "(unavailable)";
 				throw new AddressResolutionException(
 					"%1 (while resolving path %3 at element \"%2\")",
-					$e->getMessage(),
+					empty($e->getMessage()) ? get_class($e) : $e->getMessage(),
 					$element,
 					$addr,
 					$e);				

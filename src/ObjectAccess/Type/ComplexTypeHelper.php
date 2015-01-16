@@ -67,7 +67,12 @@ class ComplexTypeHelper extends TypeHelper
 
 		if ($value instanceof Value_Concrete)
 		{
-			$resultType = $this->typeRegistry->getTypeHelperByName($property->getTypeName());
+			$resultTypeName = $property->getTypeName();
+			if (is_null($resultTypeName))
+			{
+				throw new TypeException("Property %1::%2 does not have type information", $this->getName(), $propertyName);
+			}
+			$resultType = $this->typeRegistry->getTypeHelperByName($resultTypeName);
 
 			return ResolvedValue::create($resultType, $value->getValue(), $resourceAddress, $origin);
 		}

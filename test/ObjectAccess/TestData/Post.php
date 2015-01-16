@@ -84,7 +84,7 @@ class Post
 	{
 		$type = new DefaultComplexType("Light\ObjectAccess\TestData\Post");
 		$type->addProperty(new DefaultProperty("id"));
-		$type->addProperty(new DefaultProperty("title"));
+		$type->addProperty(new DefaultProperty("title", "string"));
 		$type->addProperty(new DefaultProperty("text"));
 		return $type;
 	}
