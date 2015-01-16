@@ -13,6 +13,7 @@ use Light\ObjectAccess\Resource\Util\ResourceWrappingIterator;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Collection\Append;
 use Light\ObjectAccess\Type\Collection\Iterate;
+use Light\ObjectAccess\Type\Collection\Search;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Type\Complex\Value_Unavailable;
 
@@ -34,6 +35,29 @@ class CollectionTypeHelper extends TypeHelper
 	public function getBaseTypeHelper()
 	{
 		return $this->typeRegistry->getTypeHelperByName($this->getType()->getBaseTypeName());
+	}
+
+	/**
+	 * Returns a helper for the type of the given search property.
+	 * @param string $propertyName
+	 * @return TypeHelper
+	 * @throws TypeException	If the underlying type does not support searching.
+	 */
+	public function getSearchPropertyTypeHelper($propertyName)
+	{
+		if ($this->type instanceof Search)
+		{
+			$property = $this->type->getProperty($propertyName);
+			if (is_null($property))
+			{
+				throw new TypeException("Property \"%1\" does not exist in type %2", $propertyName, $this->getName());
+			}
+			return $this->typeRegistry->getTypeHelperByName($property->getTypeName());
+		}
+		else
+		{
+			throw new TypeException("Type %1 does not support search properties", $this->getName());
+		}
 	}
 
 	/**
