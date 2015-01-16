@@ -28,7 +28,19 @@ class QueryConcrete extends Query
 
 	public function append($propertyName, QueryArgument $argument)
 	{
-		// TODO
+		$property = $this->type->getProperty($propertyName);
+		if (is_null($property))
+		{
+			throw new TypeException("Property \"%1\" does not exist in type %2", $propertyName, $this->typeHelper->getName());
+		}
+
+		if (!$property->isValidArgument($argument))
+		{
+			throw new TypeException("The specified argument is not valid for property %1::%2", $this->typeHelper->getName(), $property);
+		}
+
+		$this->getArgumentList($propertyName)->append($argument);
+
 		return $this;
 	}
 
@@ -40,7 +52,31 @@ class QueryConcrete extends Query
 	 */
 	public function with($propertyNames, $callback)
 	{
-		// TODO
+		if (is_string($propertyNames))
+		{
+			$propertyNames = array($propertyNames);
+		}
+
+		foreach($propertyNames as $name)
+		{
+			if (!isset($this->propertyArgumentLists[$name])) continue;
+
+			$values = $this->propertyArgumentLists[$name];
+
+			// TODO
+			if (is_array($values))
+			{
+				foreach($values as $value)
+				{
+					call_user_func($callback, $value, $name);
+				}
+			}
+			else
+			{
+				call_user_func($callback, $values, $name);
+			}
+		}
+
 		return $this;
 	}
 

@@ -5,7 +5,6 @@ use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Query\Argument\QueryArgument;
 use Light\ObjectAccess\Type\Collection\Property;
 use Light\ObjectAccess\Type\TypeHelper;
-use Traversable;
 
 class PropertyArgumentList implements \IteratorAggregate
 {
@@ -53,8 +52,7 @@ class PropertyArgumentList implements \IteratorAggregate
 
 	/**
 	 * Returns a list of values in this list.
-	 * @return Traversable An instance of an object implementing <b>Iterator</b> or
-	 * <b>Traversable</b>
+	 * @return \Iterator
 	 */
 	public function getIterator()
 	{

@@ -3,6 +3,7 @@ namespace Light\ObjectAccess\TestData;
 
 use Light\Exception\Exception;
 use Light\Exception\NotImplementedException;
+use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
 use Light\ObjectAccess\Resource\Origin_Unavailable;
 use Light\ObjectAccess\Resource\ResolvedCollection;
@@ -12,18 +13,28 @@ use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Collection\Append;
 use Light\ObjectAccess\Type\Collection\Element;
 use Light\ObjectAccess\Type\Collection\Iterate;
+use Light\ObjectAccess\Type\Collection\Property;
+use Light\ObjectAccess\Type\Collection\Search;
+use Light\ObjectAccess\Type\Collection\SearchContext;
+use Light\ObjectAccess\Type\Complex\Value;
+use Light\ObjectAccess\Type\Util\CollectionPropertyHost;
 use Light\ObjectAccess\Type\Util\DefaultCollectionType;
+use Light\ObjectAccess\Type\Util\DefaultFilterableProperty;
 
-class PostCollectionType extends DefaultCollectionType implements Append, Iterate
+class PostCollectionType extends DefaultCollectionType implements Append, Iterate, Search
 {
 	/** @var Database */
 	private $database;
+	/** @var CollectionPropertyHost */
+	private $properties;
 
 	public function __construct(Database $db)
 	{
 		parent::__construct(Post::class);
 
 		$this->database = $db;
+		$this->properties = new CollectionPropertyHost();
+		$this->properties->append(new DefaultFilterableProperty("author", Author::class));
 	}
 
 	/**
@@ -110,6 +121,28 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 				throw new NotImplementedException;
 			}
 		}
+	}
+
+	/**
+	 * Returns a specification of a collection property.
+	 * @param string $propertyName
+	 * @return Property    A Property object, if the property exists; otherwise, NULL.
+	 */
+	public function getProperty($propertyName)
+	{
+		return $this->properties[$propertyName];
+	}
+
+	/**
+	 * Returns all objects matching the scope.
+	 * @param ResolvedCollection $collection
+	 * @param Scope              $scope
+	 * @param SearchContext      $context
+	 * @return Value[]
+	 */
+	public function find(ResolvedCollection $collection, Scope $scope, SearchContext $context)
+	{
+		// TODO: Implement find() method.
 	}
 
 
