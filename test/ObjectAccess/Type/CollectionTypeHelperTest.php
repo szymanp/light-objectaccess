@@ -2,6 +2,7 @@
 namespace Light\ObjectAccess\Type;
 
 use Light\ObjectAccess\Resource\Origin;
+use Light\ObjectAccess\Resource\Origin_ElementInCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedValue;
@@ -57,5 +58,22 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$helper->appendValue($coll, $post, new DummyTransaction());
 
 		$this->assertSame($post, $this->setup->getDatabase()->getPost(5050));
+	}
+
+	public function testIterate()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$iterator = $helper->getIterator($coll);
+		$this->assertInstanceOf(\Iterator::class, $iterator);
+
+		$iterator->rewind();
+		$result = $iterator->current();
+		$this->assertInstanceOf(ResolvedObject::class, $result);
+		$this->assertSame($this->setup->getDatabase()->getPost(4040), $result->getValue());
+		$this->assertEquals(4040, $iterator->key());
+		$this->assertInstanceOf(Origin_ElementInCollection::class, $result->getOrigin());
 	}
 }

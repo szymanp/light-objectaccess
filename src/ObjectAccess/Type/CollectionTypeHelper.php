@@ -1,6 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
+use Light\Exception\InvalidReturnValue;
 use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Query\Scope;
@@ -8,8 +9,10 @@ use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
+use Light\ObjectAccess\Resource\Util\ResourceWrappingIterator;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Collection\Append;
+use Light\ObjectAccess\Type\Collection\Iterate;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Type\Complex\Value_Unavailable;
 
@@ -105,6 +108,29 @@ class CollectionTypeHelper extends TypeHelper
 		else
 		{
 			throw new TypeException("Type %1 does not support appending", $this->getName());
+		}
+	}
+
+	/**
+	 * Returns an Iterator over the elements in the given collection.
+	 * @param ResolvedCollection $collection
+	 * @return \Iterator
+	 * @throws TypeException	If the type does not support iteration.
+	 */
+	public function getIterator(ResolvedCollection $collection)
+	{
+		if ($this->type instanceof Iterate)
+		{
+			$iterator = $this->type->getIterator($collection);
+			if (!($iterator instanceof \Iterator))
+			{
+				throw new InvalidReturnValue($this->type, "getIterator", $iterator, "Iterator");
+			}
+			return new ResourceWrappingIterator($collection, $iterator);
+		}
+		else
+		{
+			throw new TypeException("Type %1 does not support iteration", $this->getName());
 		}
 	}
 }

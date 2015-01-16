@@ -7,12 +7,14 @@ use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
 use Light\ObjectAccess\Resource\Origin_Unavailable;
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
+use Light\ObjectAccess\Resource\ResolvedCollectionValue;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Collection\Append;
 use Light\ObjectAccess\Type\Collection\Element;
+use Light\ObjectAccess\Type\Collection\Iterate;
 use Light\ObjectAccess\Type\Util\DefaultCollectionType;
 
-class PostCollectionType extends DefaultCollectionType implements Append
+class PostCollectionType extends DefaultCollectionType implements Append, Iterate
 {
 	/** @var Database */
 	private $database;
@@ -85,5 +87,30 @@ class PostCollectionType extends DefaultCollectionType implements Append
 			throw new NotImplementedException("Origin is " . get_class($origin));
 		}
 	}
+
+	/**
+	 * Returns an Iterator over the elements in the given collection.
+	 * @param ResolvedCollection $collection
+	 * @return \Iterator
+	 */
+	public function getIterator(ResolvedCollection $collection)
+	{
+		if ($collection instanceof ResolvedCollectionValue)
+		{
+			return new \ArrayIterator($collection->getValue());
+		}
+		elseif ($collection instanceof ResolvedCollectionResource)
+		{
+			if ($collection->getOrigin() instanceof Origin_Unavailable)
+			{
+				return new \ArrayIterator($this->database->getPosts());
+			}
+			else
+			{
+				throw new NotImplementedException;
+			}
+		}
+	}
+
 
 }
