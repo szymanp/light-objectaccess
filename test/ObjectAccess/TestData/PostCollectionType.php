@@ -116,11 +116,8 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 			{
 				return new \ArrayIterator($this->database->getPosts());
 			}
-			else
-			{
-				throw new NotImplementedException;
-			}
 		}
+		throw new NotImplementedException;
 	}
 
 	/**
