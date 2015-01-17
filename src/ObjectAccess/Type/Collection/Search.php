@@ -19,7 +19,8 @@ interface Search
 	 * @param ResolvedCollection 	$collection
 	 * @param Scope					$scope
 	 * @param SearchContext			$context
-	 * @return Value[]
+	 * @return \Iterator	An iterator over all objects matching the scope.
+	 *                   	The key of the iterator should indicate the key of the object in the collection.
 	 */
 	public function find(ResolvedCollection $collection, Scope $scope, SearchContext $context);
 }
