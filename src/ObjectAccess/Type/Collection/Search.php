@@ -1,9 +1,8 @@
 <?php 
 namespace Light\ObjectAccess\Type\Collection;
 
+use Light\ObjectAccess\Query\Scope\QueryScope;
 use Light\ObjectAccess\Resource\ResolvedCollection;
-use Light\ObjectAccess\Query\Scope;
-use Light\ObjectAccess\Type\Complex\Value;
 
 interface Search
 {
@@ -17,10 +16,10 @@ interface Search
 	/**
 	 * Returns all objects matching the scope.
 	 * @param ResolvedCollection 	$collection
-	 * @param Scope					$scope
+	 * @param QueryScope			$scope
 	 * @param SearchContext			$context
 	 * @return \Iterator	An iterator over all objects matching the scope.
 	 *                   	The key of the iterator should indicate the key of the object in the collection.
 	 */
-	public function find(ResolvedCollection $collection, Scope $scope, SearchContext $context);
+	public function find(ResolvedCollection $collection, QueryScope $scope, SearchContext $context);
 }

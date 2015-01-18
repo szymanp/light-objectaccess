@@ -4,6 +4,7 @@ namespace Light\ObjectAccess\TestData;
 use Light\Exception\Exception;
 use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Query\Scope;
+use Light\ObjectAccess\Query\Scope\Scope_Query;
 use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
 use Light\ObjectAccess\Resource\Origin_Unavailable;
 use Light\ObjectAccess\Resource\ResolvedCollection;
@@ -16,7 +17,6 @@ use Light\ObjectAccess\Type\Collection\Iterate;
 use Light\ObjectAccess\Type\Collection\Property;
 use Light\ObjectAccess\Type\Collection\Search;
 use Light\ObjectAccess\Type\Collection\SearchContext;
-use Light\ObjectAccess\Type\Complex\Value;
 use Light\ObjectAccess\Type\Util\CollectionPropertyHost;
 use Light\ObjectAccess\Type\Util\DefaultCollectionType;
 use Light\ObjectAccess\Type\Util\DefaultFilterableProperty;
@@ -103,6 +103,7 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 	 * Returns an Iterator over the elements in the given collection.
 	 * @param ResolvedCollection $collection
 	 * @return \Iterator
+	 * @throws NotImplementedException
 	 */
 	public function getIterator(ResolvedCollection $collection)
 	{
@@ -132,16 +133,15 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 
 	/**
 	 * Returns all objects matching the scope.
-	 * @param ResolvedCollection $collection
-	 * @param Scope              $scope
-	 * @param SearchContext      $context
+	 * @param ResolvedCollection	$collection
+	 * @param Scope\QueryScope  	$scope
+	 * @param SearchContext      	$context
 	 * @return \Iterator	An iterator over all objects matching the scope.
 	 *                   	The key of the iterator should indicate the key of the object in the collection.
 	 */
-	public function find(ResolvedCollection $collection, Scope $scope, SearchContext $context)
+	public function find(ResolvedCollection $collection, Scope\QueryScope $scope, SearchContext $context)
 	{
-		// TODO: Implement find() method.
+		// TODO
 	}
-
 
 }

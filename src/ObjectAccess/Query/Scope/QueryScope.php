@@ -7,7 +7,7 @@ use Light\ObjectAccess\Query\Scope;
 /**
  * A scope that identifies zero or more elements in a collection by a query expression.
  */
-final class Scope_Query extends Scope
+final class QueryScope extends Scope
 {
 	/** @var Query */
 	private $query;
