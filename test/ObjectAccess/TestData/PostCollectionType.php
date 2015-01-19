@@ -3,6 +3,7 @@ namespace Light\ObjectAccess\TestData;
 
 use Light\Exception\Exception;
 use Light\Exception\NotImplementedException;
+use Light\ObjectAccess\Query\Query;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Query\Scope\Scope_Query;
 use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
@@ -20,6 +21,8 @@ use Light\ObjectAccess\Type\Collection\SearchContext;
 use Light\ObjectAccess\Type\Util\CollectionPropertyHost;
 use Light\ObjectAccess\Type\Util\DefaultCollectionType;
 use Light\ObjectAccess\Type\Util\DefaultFilterableProperty;
+
+include_once("test/ObjectAccess/TestData/QueryFilterIterator.php");
 
 class PostCollectionType extends DefaultCollectionType implements Append, Iterate, Search
 {
@@ -141,7 +144,9 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 	 */
 	public function find(ResolvedCollection $collection, Scope\QueryScope $scope, SearchContext $context)
 	{
-		// TODO
-	}
+		$offset = $scope->getOffset() ?: 0;
+		$count = $scope->getCount() ?: -1;
 
+		return new \LimitIterator(new QueryFilterIterator($this->getIterator($collection), $scope->getQuery()), $offset, $count);
+	}
 }

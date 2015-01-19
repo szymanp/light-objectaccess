@@ -100,4 +100,22 @@ class QueryConcrete extends Query
 			return $this->propertyArgumentLists[$propertyName] = new PropertyArgumentList($propertyTypeHelper, $property);
 		}
 	}
+
+	/**
+	 * Returns argument lists for all properties.
+	 * @return array<string, PropertyArgumentList>
+	 */
+	public function getArgumentLists()
+	{
+		return $this->propertyArgumentLists;
+	}
+
+	/**
+	 * Returns a type helper for the collection this query will operate on.
+	 * @return CollectionTypeHelper
+	 */
+	public function getCollectionTypeHelper()
+	{
+		return $this->typeHelper;
+	}
 }

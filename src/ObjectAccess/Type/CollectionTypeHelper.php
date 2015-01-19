@@ -5,6 +5,9 @@ use Light\Exception\InvalidReturnValue;
 use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Query\Scope;
+use Light\ObjectAccess\Query\Scope\EmptyScope;
+use Light\ObjectAccess\Query\Scope\KeyScope;
+use Light\ObjectAccess\Query\Scope\Scope_Query;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
@@ -14,8 +17,10 @@ use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Collection\Append;
 use Light\ObjectAccess\Type\Collection\Iterate;
 use Light\ObjectAccess\Type\Collection\Search;
+use Light\ObjectAccess\Type\Collection\SearchContext;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Type\Complex\Value_Unavailable;
+use Light\ObjectAccess\Type\Util\EmptySearchContext;
 
 class CollectionTypeHelper extends TypeHelper
 {
@@ -71,6 +76,40 @@ class CollectionTypeHelper extends TypeHelper
 	}
 
 	/**
+	 * Returns an iterator over collection elements that match the given scope.
+	 *
+	 * Note that this is an utility method. There are more specialized methods
+	 * either on the {@link CollectionTypeHelper} or on the {@link CollectionType} itself
+	 * if one knows what type of Scope is involved.
+	 * The specialized methods may accept more parameters and return a more precise value
+	 * (e.g. a single value instead of an iterator).
+	 *
+	 * @param ResolvedCollection $collection
+	 * @param Scope              $scope
+	 * @return \Iterator
+	 * @throws NotImplementedException
+	 * @throws TypeException
+	 */
+	public function getElements(ResolvedCollection $collection, Scope $scope)
+	{
+		if ($scope instanceof KeyScope)
+		{
+			$result = $this->getElementAtKey($collection, $scope->getKey());
+			return new \ArrayIterator(array($scope->getKey() => $result));
+		}
+		elseif ($scope instanceof EmptyScope)
+		{
+			return $this->getIterator($collection);
+		}
+		elseif ($scope instanceof Scope\QueryScope)
+		{
+			return $this->findElements($collection, $scope, EmptySearchContext::create());
+		}
+		// TODO	Implement for other Scope types.
+		throw new NotImplementedException();
+	}
+
+	/**
 	 * Returns an element from the collection at the given key.
 	 * @param ResolvedCollection $coll
 	 * @param string|integer    $key
@@ -113,6 +152,32 @@ class CollectionTypeHelper extends TypeHelper
 		{
 			// The element does not exist.
 			return null;
+		}
+	}
+
+	/**
+	 * Returns all objects matching the scope.
+	 * @param ResolvedCollection 	$collection
+	 * @param Scope\QueryScope		$scope
+	 * @param SearchContext			$context
+	 * @return \Iterator	An iterator over all objects matching the scope.
+	 *                   	The key of the iterator should indicate the key of the object in the collection.
+	 * @throws TypeException		If the type does not support searching.
+	 */
+	public function findElements(ResolvedCollection $collection, Scope\QueryScope $scope, SearchContext $context)
+	{
+		if ($this->type instanceof Search)
+		{
+			$iterator = $this->type->find($collection, $scope, $context);
+			if (!($iterator instanceof \Iterator))
+			{
+				throw new InvalidReturnValue($this->type, "find", $iterator, "Iterator");
+			}
+			return new ResourceWrappingIterator($collection, $iterator);
+		}
+		else
+		{
+			throw new TypeException("Type %1 does not support searching", $this->getName());
 		}
 	}
 

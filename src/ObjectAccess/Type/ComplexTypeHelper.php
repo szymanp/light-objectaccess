@@ -9,6 +9,7 @@ use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
+use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Type\Complex\Value_Unavailable;
@@ -128,5 +129,26 @@ class ComplexTypeHelper extends TypeHelper
 	public function isValidValue($value)
 	{
 		return $this->getType()->isValidValue($value);
+	}
+
+	/**
+	 * Returns a {@link ResolvedObject} object for the given value.
+	 *
+	 * The value is resolved with no address and no origin.
+	 *
+	 * @param object	$value
+	 * @return ResolvedObject
+	 * @throws ResourceException
+	 */
+	public function resolveValue($value)
+	{
+		if ($this->isValidValue($value))
+		{
+			return new ResolvedObject($this, $value, EmptyResourceAddress::create(), Origin::unavailable());
+		}
+		else
+		{
+			throw new ResourceException("Value is not compatible with type %1", $this->getName());
+		}
 	}
 }

@@ -86,6 +86,7 @@ class Post
 		$type->addProperty(new DefaultProperty("id"));
 		$type->addProperty(new DefaultProperty("title", "string"));
 		$type->addProperty(new DefaultProperty("text"));
+		$type->addProperty(new DefaultProperty("author", Author::class));
 		return $type;
 	}
 }

@@ -57,4 +57,22 @@ abstract class QueryProxy extends Query
 		return $this->query->getArgumentList($propertyName);
 	}
 
+	/**
+	 * Returns argument lists for all properties.
+	 * @return array<string, PropertyArgumentList>
+	 */
+	final public function getArgumentLists()
+	{
+		return $this->query->getArgumentLists();
+	}
+
+	/**
+	 * Returns a type helper for the collection this query will operate on.
+	 * @return CollectionTypeHelper
+	 */
+	final public function getCollectionTypeHelper()
+	{
+		return $this->query->getCollectionTypeHelper();
+	}
+
 }

@@ -17,6 +17,12 @@ abstract class Query
 		return new QueryConcrete($typeHelper);
 	}
 
+	/**
+	 * Appends a new query argument to this property.
+	 * @param string        $propertyName
+	 * @param QueryArgument $argument
+	 * @return $this
+	 */
 	abstract public function append($propertyName, QueryArgument $argument);
 
 	/**
@@ -34,4 +40,16 @@ abstract class Query
 	 * @throws TypeException	If the named property does not exist.
 	 */
 	abstract public function getArgumentList($propertyName);
+
+	/**
+	 * Returns argument lists for all properties.
+	 * @return array<string, PropertyArgumentList>
+	 */
+	abstract public function getArgumentLists();
+
+	/**
+	 * Returns a type helper for the collection this query will operate on.
+	 * @return CollectionTypeHelper
+	 */
+	abstract public function getCollectionTypeHelper();
 }

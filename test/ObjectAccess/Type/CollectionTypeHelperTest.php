@@ -1,6 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
+use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\Origin_ElementInCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
@@ -75,5 +76,17 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($this->setup->getDatabase()->getPost(4040), $result->getValue());
 		$this->assertEquals(4040, $iterator->key());
 		$this->assertInstanceOf(Origin_ElementInCollection::class, $result->getOrigin());
+	}
+
+	public function testGetElements()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$iterator = $helper->getElements($coll, Scope::createWithKey(4040));
+		$elements = iterator_to_array($iterator);
+		$this->assertEquals(1, count($elements));
+		$this->assertSame($this->setup->getDatabase()->getPost(4040), $elements[4040]->getValue());
 	}
 }
