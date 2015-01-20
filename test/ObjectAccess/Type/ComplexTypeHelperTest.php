@@ -36,11 +36,11 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(Author::class, $typeHelper->getName());
 	}
 
-	public function testGetPropertyType()
+	public function testGetPropertyTypeHelper()
 	{
 		$typeHelper = $this->typeRegistry->getTypeHelperByName(Author::class);
-		$property = $typeHelper->getPropertyType("id");
-		$this->assertInstanceOf(SimpleType::class, $property);
+		$propertyTypeHelper = $typeHelper->getPropertyTypeHelper("id");
+		$this->assertInstanceOf(SimpleType::class, $propertyTypeHelper->getType());
 	}
 
 	public function testReadProperty()

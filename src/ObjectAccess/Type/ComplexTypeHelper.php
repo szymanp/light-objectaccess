@@ -27,12 +27,12 @@ class ComplexTypeHelper extends TypeHelper
 	/**
 	 * Returns a Type for the specified property.
 	 * @param string $propertyName
-	 * @return Type
+	 * @return TypeHelper
 	 */
-	public function getPropertyType($propertyName)
+	public function getPropertyTypeHelper($propertyName)
 	{
 		$typeName = $this->getType()->getProperty($propertyName)->getTypeName();
-		return $this->typeRegistry->getTypeHelperByName($typeName)->getType();
+		return $this->typeRegistry->getTypeHelperByName($typeName);
 	}
 
 	public function createResource(Transaction $transaction)
