@@ -6,7 +6,7 @@ use Light\ObjectAccess\Query\Scope;
 /**
  * An absolute address for a resource.
  */
-interface ResourceAddress
+interface ResourceAddress extends Address
 {
 	/**
 	 * Returns a new address with the given scope appended at the end.

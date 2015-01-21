@@ -6,7 +6,7 @@ use Light\ObjectAccess\Resource\ResolvedResource;
 /**
  * Provides a path from a source resource to a destination resource.
  */
-interface RelativeAddress
+interface RelativeAddress extends Address
 {
 	/**
 	 * Returns the source resource.
