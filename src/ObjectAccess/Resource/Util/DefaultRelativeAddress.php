@@ -13,7 +13,7 @@ class DefaultRelativeAddress implements RelativeAddress
 	private $sourceResource;
 
 	/** @var array */
-	private $elements;
+	private $elements = array();
 
 	/**
 	 * Constructs a new DefaultRelativeAddress object.
