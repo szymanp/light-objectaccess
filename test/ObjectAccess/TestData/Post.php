@@ -82,11 +82,6 @@ class Post
 	 */
 	public static function createType()
 	{
-		$type = new DefaultComplexType("Light\ObjectAccess\TestData\Post");
-		$type->addProperty(new DefaultProperty("id"));
-		$type->addProperty(new DefaultProperty("title", "string"));
-		$type->addProperty(new DefaultProperty("text"));
-		$type->addProperty(new DefaultProperty("author", Author::class));
-		return $type;
+		return new PostType();
 	}
 }

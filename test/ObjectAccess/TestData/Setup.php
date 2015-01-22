@@ -10,6 +10,7 @@ use Light\ObjectAccess\Type\Util\DefaultCollectionType;
 use Light\ObjectAccess\Type\Util\DefaultTypeProvider;
 
 include_once("Author.php");
+include_once("PostType.php");
 include_once("Post.php");
 include_once("Database.php");
 include_once("PostCollectionType.php");
