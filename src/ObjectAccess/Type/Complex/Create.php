@@ -10,9 +10,9 @@ use Light\ObjectAccess\Transaction\Transaction;
 interface Create
 {
 	/**
-	 * Creates a new instance of an object of this complex-type.
-	 * @param CreationContext	$context
+	 * Creates a new instance of an object of this complex type.
+	 * @param Transaction $transaction
 	 * @return object
 	 */
-	public function createObject(CreationContext $context, Transaction $transaction);
+	public function createObject(Transaction $transaction);
 }

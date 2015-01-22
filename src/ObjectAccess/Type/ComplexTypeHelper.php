@@ -11,6 +11,7 @@ use Light\ObjectAccess\Resource\ResolvedResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\Transaction\Transaction;
+use Light\ObjectAccess\Type\Complex\Create;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Type\Complex\Value_Unavailable;
 
@@ -35,9 +36,24 @@ class ComplexTypeHelper extends TypeHelper
 		return $this->typeRegistry->getTypeHelperByName($typeName);
 	}
 
+	/**
+	 * Creates a new resource of this type.
+	 * @param Transaction $transaction
+	 * @return ResolvedObject	Returns a resource object with an empty address and no origin.
+	 * @throws TypeException	If the type does not support creation of new resources.
+	 */
 	public function createResource(Transaction $transaction)
 	{
-
+		$type = $this->getType();
+		if ($type instanceof Create)
+		{
+			$object = $type->createObject($transaction);
+			return new ResolvedObject($this, $object, EmptyResourceAddress::create(), Origin::unavailable());
+		}
+		else
+		{
+			throw new TypeException("Type %1 does not support creation of objects", $this->getName());
+		}
 	}
 
 	public function deleteResource(Transaction $transaction)

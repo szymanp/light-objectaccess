@@ -3,12 +3,16 @@ namespace Light\ObjectAccess\Type;
 
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
+use Light\ObjectAccess\Resource\Origin_Unavailable;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
+use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedScalar;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\TestData\Author;
 use Light\ObjectAccess\TestData\Database;
+use Light\ObjectAccess\TestData\Post;
+use Light\ObjectAccess\TestData\PostType;
 use Light\ObjectAccess\TestData\Setup;
 use Light\ObjectAccess\Transaction\Util\DummyTransaction;
 
@@ -85,5 +89,19 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame($resolvedAuthor, $origin->getObject());
 		$this->assertEquals("posts", $origin->getPropertyName());
+	}
+
+	public function testCreate()
+	{
+		$typeHelper = $this->typeRegistry->getComplexTypeHelper(Post::class);
+		$resource = $typeHelper->createResource(new DummyTransaction());
+
+		$this->assertInstanceOf(ResolvedObject::class, $resource);
+		$this->assertInstanceOf(EmptyResourceAddress::class, $resource->getAddress());
+		$this->assertInstanceOf(Origin_Unavailable::class, $resource->getOrigin());
+
+		$post = $resource->getValue();
+		$this->assertInstanceOf(Post::class, $post);
+		$this->assertEquals(PostType::$autoId-1, $post->getId());
 	}
 }

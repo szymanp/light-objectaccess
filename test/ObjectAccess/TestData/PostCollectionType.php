@@ -51,6 +51,7 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 		if ($collection->getOrigin() instanceof Origin_Unavailable)
 		{
 			$this->database->addPost($value);
+			// TODO What about adding the collection to the transaction?
 		}
 		else
 		{
