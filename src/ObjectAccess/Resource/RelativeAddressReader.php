@@ -4,6 +4,7 @@ namespace Light\ObjectAccess\Resource;
 use Light\ObjectAccess\Exception\AddressResolutionException;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Addressing\RelativeAddress;
+use Light\ObjectAccess\Type\Util\EmptySearchContext;
 
 class RelativeAddressReader
 {
@@ -42,11 +43,11 @@ class RelativeAddressReader
 			{
 				$addr = $resource->getAddress()->hasStringForm() ? '"' . $resource->getAddress()->getAsString() . '"' : "(unavailable)";
 				throw new AddressResolutionException(
-					"%1 (while resolving path %3 at element \"%2\")",
-					empty($e->getMessage()) ? get_class($e) : $e->getMessage(),
-					$element,
+					"%1 (while resolving path %3 at element %2)",
+					empty($e->getMessage()) ? get_class($e) . " in " . $e->getFile() . ":" . $e->getLine() : $e->getMessage(),
+					is_scalar($element) ? '"' . $element . '"' : $element,
 					$addr,
-					$e);				
+					$e);
 			}
 		}
 
@@ -86,9 +87,22 @@ class RelativeAddressReader
 		{
 			// The current resource must be a collection.
 
-			if ($resource instanceof ResolvedCollection)
+			if ($resource instanceof ResolvedCollectionResource)
 			{
-				// TODO
+				$scope = $element;
+				if ($scope instanceof Scope\QueryScope)
+				{
+					$searchContext = EmptySearchContext::create();
+					return $resource->getTypeHelper()->queryCollection($resource, $scope, $searchContext);
+				}
+				else
+				{
+					return $resource->getTypeHelper()->applyScope($resource, $scope);
+				}
+			}
+			elseif ($resource instanceof ResolvedCollectionValue)
+			{
+				throw new AddressResolutionException("A scope cannot be applied to a collection of values");
 			}
 			else
 			{

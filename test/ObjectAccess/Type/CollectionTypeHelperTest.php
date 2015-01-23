@@ -5,6 +5,7 @@ use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\Origin_ElementInCollection;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
+use Light\ObjectAccess\Resource\ResolvedCollectionValue;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
@@ -78,15 +79,40 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf(Origin_ElementInCollection::class, $result->getOrigin());
 	}
 
-	public function testGetElements()
+	public function testRead()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(),Origin::unavailable());
+
+		$valuesColl = $helper->readCollection($coll);
+		$this->assertInstanceOf(ResolvedCollectionValue::class, $valuesColl);
+		$this->assertEquals($this->setup->getDatabase()->getPosts(), $valuesColl->getValue());
+		$this->assertSame($coll->getOrigin(), $valuesColl->getOrigin());
+	}
+
+	public function testGetIteratorWithScope()
 	{
 		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
 
 		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
 
-		$iterator = $helper->getElements($coll, Scope::createWithKey(4040));
+		$iterator = $helper->getIteratorWithScope($coll, Scope::createWithKey(4040));
 		$elements = iterator_to_array($iterator);
 		$this->assertEquals(1, count($elements));
 		$this->assertSame($this->setup->getDatabase()->getPost(4040), $elements[4040]->getValue());
+	}
+
+	public function testApplyScope()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$result = $helper->applyScope($coll, Scope::createWithKey(4040));
+		$this->assertInstanceOf(ResolvedObject::class, $result);
+		$this->assertSame($this->setup->getDatabase()->getPost(4040), $result->getValue());
+
+		$result = $helper->applyScope($coll, Scope::createEmptyScope());
+		$this->assertInstanceOf(ResolvedCollectionValue::class, $result);
+		$this->assertEquals(3, count($result->getValue()));
 	}
 }

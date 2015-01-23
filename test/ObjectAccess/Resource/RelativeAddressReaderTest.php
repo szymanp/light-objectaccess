@@ -1,6 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Resource;
 
+use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Util\DefaultRelativeAddress;
 use Light\ObjectAccess\TestData\Setup;
 
@@ -57,6 +58,47 @@ class RelativeAddressReaderTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf(ResolvedScalar::class, $result);
 		$this->assertEquals("Is this working?", $result->getValue());
+	}
 
+	public function testScopeInPath()
+	{
+		$author = $this->setup->getDatabase()->getAuthor(1010);
+		$authorResource = $this->setup->getTypeRegistry()->resolveValue($author);
+
+		// author/posts
+		$addr = new DefaultRelativeAddress($authorResource);
+		$addr->appendElement("posts");
+
+		$reader = new RelativeAddressReader($addr);
+		$result = $reader->read();
+
+		$this->assertInstanceOf(ResolvedCollectionResource::class, $result);
+
+		// author/posts/
+		$addr->appendScope(Scope::createEmptyScope());
+
+		$reader = new RelativeAddressReader($addr);
+		$result = $reader->read();
+
+		$this->assertInstanceOf(ResolvedCollectionValue::class, $result);
+		$this->assertEquals($this->setup->getDatabase()->getPostsForAuthor($author), $result->getValue());
+	}
+
+	/**
+	 * @expectedException 			\Light\ObjectAccess\Exception\AddressResolutionException
+	 * @expectedExceptionMessage 	A scope cannot be applied to a collection of values
+	 */
+	public function testDoubleScopeInPath()
+	{
+		$author = $this->setup->getDatabase()->getAuthor(1010);
+		$authorResource = $this->setup->getTypeRegistry()->resolveValue($author);
+
+		$addr = new DefaultRelativeAddress($authorResource);
+		$addr->appendElement("posts");
+		$addr->appendScope(Scope::createEmptyScope());
+		$addr->appendScope(Scope::createEmptyScope());
+
+		$reader = new RelativeAddressReader($addr);
+		$reader->read();
 	}
 }

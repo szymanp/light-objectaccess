@@ -105,21 +105,43 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 
 	/**
 	 * Returns an Iterator over the elements in the given collection.
-	 * @param ResolvedCollection $collection
-	 * @return \Iterator
-	 * @throws NotImplementedException
+	 * @param ResolvedCollectionValue $collection
+	 * @return \Iterator	An iterator over the elements in the collection.
+	 *                   	The key of the iterator should indicate the key of the object in the collection.
 	 */
-	public function getIterator(ResolvedCollection $collection)
+	public function getIterator(ResolvedCollectionValue $collection)
 	{
-		if ($collection instanceof ResolvedCollectionValue)
+		return new \ArrayIterator($collection->getValue());
+	}
+
+	/**
+	 * Returns all the elements of the collection.
+	 *
+	 * This method will be called if all the elements of a collection need to be retrieved,
+	 * for example when a search using {@link EmptyScope} is invoked.
+	 *
+	 * @param ResolvedCollectionResource $collection
+	 * @return mixed    All the elements of the collection.
+	 */
+	public function read(ResolvedCollectionResource $collection)
+	{
+		$origin = $collection->getOrigin();
+		if ($origin instanceof Origin_Unavailable)
 		{
-			return new \ArrayIterator($collection->getValue());
+			return $this->database->getPosts();
 		}
-		elseif ($collection instanceof ResolvedCollectionResource)
+		elseif ($origin instanceof Origin_PropertyOfObject)
 		{
-			if ($collection->getOrigin() instanceof Origin_Unavailable)
+			$object = $origin->getObject()->getValue();
+			if ($object instanceof Author && $origin->getPropertyName() == "posts")
 			{
-				return new \ArrayIterator($this->database->getPosts());
+				return $this->database->getPostsForAuthor($object);
+			}
+			else
+			{
+				throw new Exception("PostCollectionType only supports Author objects, not %1::%2",
+					get_class($origin->getObject()),
+					$origin->getPropertyName());
 			}
 		}
 		throw new NotImplementedException;
@@ -136,18 +158,19 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 	}
 
 	/**
-	 * Returns all objects matching the scope.
-	 * @param ResolvedCollection	$collection
-	 * @param Scope\QueryScope  	$scope
-	 * @param SearchContext      	$context
-	 * @return \Iterator	An iterator over all objects matching the scope.
-	 *                   	The key of the iterator should indicate the key of the object in the collection.
+	 * Returns all elements of the collection matching the query scope.
+	 * @param ResolvedCollectionResource	$collection
+	 * @param Scope\QueryScope				$scope
+	 * @param SearchContext					$context
+	 * @return mixed	Elements of the collection matching the scope.
 	 */
-	public function find(ResolvedCollection $collection, Scope\QueryScope $scope, SearchContext $context)
+	public function find(ResolvedCollectionResource $collection, Scope\QueryScope $scope, SearchContext $context)
 	{
 		$offset = $scope->getOffset() ?: 0;
 		$count = $scope->getCount() ?: -1;
 
-		return new \LimitIterator(new QueryFilterIterator($this->getIterator($collection), $scope->getQuery()), $offset, $count);
+		$innerIterator = new \ArrayIterator($this->read($collection));
+		$iterator = new \LimitIterator(new QueryFilterIterator($innerIterator, $scope->getQuery()), $offset, $count);
+		return iterator_to_array($iterator);
 	}
 }

@@ -5,6 +5,7 @@ use Light\ObjectAccess\Query\Argument\Criterion;
 use Light\ObjectAccess\Query\Query;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Origin;
+use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\TestData\Post;
@@ -39,13 +40,14 @@ class SearchTest extends \PHPUnit_Framework_TestCase
 		$typeHelper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
 		$db = $this->setup->getDatabase();
 
-		$collection = ResolvedValue::create($typeHelper, $db->getPosts(), EmptyResourceAddress::create(), Origin::unavailable());
+		$collection = new ResolvedCollectionResource($typeHelper, EmptyResourceAddress::create(), Origin::unavailable());
 
 		$query = Query::create($typeHelper);
 		$query->append("author", new Criterion($db->getAuthor(1010)));
 		$scope = Scope::createWithQuery($query);
 
-		$iterator = $typeHelper->findElements($collection, $scope, EmptySearchContext::create());
+		$collectionWithValues = $typeHelper->queryCollection($collection, $scope, EmptySearchContext::create());
+		$iterator = $typeHelper->getIterator($collectionWithValues);
 		$elements = iterator_to_array($iterator);
 
 		$this->assertEquals(2, count($elements));

@@ -1,6 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Resource\Util;
 
+use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Addressing\RelativeAddress;
 use Light\ObjectAccess\Resource\ResolvedResource;
 
