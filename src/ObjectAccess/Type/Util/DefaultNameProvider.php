@@ -67,6 +67,23 @@ class DefaultNameProvider implements NameProvider
 		throw new \LogicException();
 	}
 
+	/**
+	 * Returns a type name corresponding tot he given URI.
+	 * @param string $uri
+	 * @return string	A type name, if this URI corresponds to a name; otherwise, NULL.
+	 */
+	public function getNameFromUri($uri)
+	{
+		if (substr($uri, 0, 4) == "php:")
+		{
+			return substr($uri, 4);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
 	private function stripPrefix($name)
 	{
 		if (!is_null($this->prefix)

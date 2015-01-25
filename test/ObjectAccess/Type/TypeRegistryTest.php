@@ -24,6 +24,14 @@ class TypeRegistryTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals("string", $stringType->getType()->getPhpType());
 	}
 
+	public function testGetTypeHelperByUri()
+	{
+		$stringType = $this->registry->getTypeHelperByUri("php:string");
+		$this->assertInstanceOf(SimpleTypeHelper::class, $stringType);
+		$this->assertEquals("string", $stringType->getType()->getPhpType());
+		$this->assertEquals("php:string", $stringType->getAddress());
+	}
+
 	/**
 	 * @expectedException 			\Light\ObjectAccess\Exception\TypeException
 	 * @expectedExceptionMessage	No type with name "Unknown" is known by this TypeRegistry

@@ -16,4 +16,11 @@ interface TypeProvider extends NameProvider
 	 * @return Type A Type object corresponding to the type name, if available; otherwise, NULL.
 	 */
 	public function getTypeByName($typeName);
+
+	/**
+	 * Returns a Type corresponding to the given URI.
+	 * @param string $typeUri An URI for a type.
+	 * @return Type A Type object corresponding to the URI, if available; otherwise, NULL.
+	 */
+	public function getTypeByURI($typeUri);
 }

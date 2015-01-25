@@ -47,6 +47,7 @@ class TypeRegistry
 	 * Returns a TypeHelper corresponding to the given name.
 	 * @param string $typeName A name of the type. For example, string[].
 	 * @return TypeHelper A Type object corresponding to the type name.
+	 * @throws TypeException	If the name does not correspond to any type known by this registry.
 	 */
 	public function getTypeHelperByName($typeName)
 	{
@@ -75,6 +76,22 @@ class TypeRegistry
 			$this->typeHelpers[$hash] = TypeHelper::create($this, $type);
 		}
 		return $this->typeHelpers[$hash];
+	}
+
+	/**
+	 * Returns a TypeHelper for the given URI.
+	 * @param string $uri
+	 * @return TypeHelper
+	 * @throws TypeException	If the URI does not correspond to any known type.
+	 */
+	public function getTypeHelperByUri($uri)
+	{
+		$type = $this->typeProvider->getTypeByURI($uri);
+		if (is_null($type))
+		{
+			throw new TypeException("No type with URI \"%1\" is known by this TypeRegistry", $uri);
+		}
+		return $this->getTypeHelperByType($type);
 	}
 
 	/**

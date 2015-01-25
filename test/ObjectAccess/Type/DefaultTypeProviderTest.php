@@ -60,4 +60,12 @@ class DefaultTypeProviderTest extends \PHPUnit_Framework_TestCase
 		$type = $provider->getTypeByValue(new \stdClass());
 		$this->assertNull($type);
 	}
+
+	public function testGetTypeByUri()
+	{
+		$provider = new DefaultTypeProvider();
+		$provider->addType($authorType = Author::createType());
+
+		$this->assertSame($authorType, $provider->getTypeByURI("php:" . Author::class));
+	}
 }

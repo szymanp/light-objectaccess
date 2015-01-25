@@ -12,7 +12,7 @@ use Light\ObjectAccess\Type\TypeProvider;
 
 class DefaultTypeProvider implements TypeProvider
 {
-	/** @var NameProvider */
+	/** @var DefaultNameProvider */
 	private $nameProvider;
 
 	private $types = array();
@@ -146,6 +146,8 @@ class DefaultTypeProvider implements TypeProvider
 			return $this->names[$typeName];
 		}
 
+		// Here we assume that $typeName is equal to PHP's name for the type.
+		// This is true as we are using DefaultNameProvider.
 		if (BuiltinSimpleType::isBuiltinType($typeName))
 		{
 			$type = new BuiltinSimpleType($typeName);
@@ -154,5 +156,23 @@ class DefaultTypeProvider implements TypeProvider
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns a Type corresponding to the given URI.
+	 * @param string $typeUri An URI for a type.
+	 * @return Type A Type object corresponding to the URI, if available; otherwise, NULL.
+	 */
+	public function getTypeByURI($typeUri)
+	{
+		$name = $this->nameProvider->getNameFromUri($typeUri);
+		if (is_null($name))
+		{
+			return null;
+		}
+		else
+		{
+			return $this->getTypeByName($name);
+		}
 	}
 }

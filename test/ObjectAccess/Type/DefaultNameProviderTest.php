@@ -27,4 +27,11 @@ class DefaultNameProviderTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals("Author", $nameProvider->getTypeName($authorType));
 	}
 
+	public function testGetNameForUri()
+	{
+		$nameProvider = new DefaultNameProvider();
+		$this->assertEquals("string", $nameProvider->getNameFromUri("php:string"));
+		$this->assertNull($nameProvider->getNameFromUri("http://somewhere.example.org/"));
+	}
+
 }
