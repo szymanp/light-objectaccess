@@ -71,13 +71,14 @@ class DefaultProperty extends AbstractProperty
 		{
 			if ($this->getter)
 			{
-				return Value::of(call_user_func($this->getter, $this, $object->getValue()));
+				$rawValue = call_user_func($this->getter, $this, $object->getValue());
 			}
 			else
 			{
 				$wrapped = Helper::wrap($object->getValue());
-				return Value::of($wrapped->getValue($this->getName()));
+				$rawValue = $wrapped->getValue($this->getName());
 			}
+			return is_null($rawValue) ? Value::notExists() : Value::of($rawValue);
 		}
 		catch (\Exception $e)
 		{

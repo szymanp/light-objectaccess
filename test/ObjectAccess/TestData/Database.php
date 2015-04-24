@@ -40,6 +40,12 @@ class Database
 		$post->setTitle("Is this working?");
 		$post->setText("Let us test it");
 		$this->addPost($post);
+
+		$post = new Post();
+		$post->setId(4043);
+		$post->setTitle("Post without author");
+		$post->setText("Interesting");
+		$this->addPost($post);
 	}
 
 	public function getPosts()

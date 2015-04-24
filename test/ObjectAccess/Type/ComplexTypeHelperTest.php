@@ -5,6 +5,7 @@ use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\Origin_PropertyOfObject;
 use Light\ObjectAccess\Resource\Origin_Unavailable;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
+use Light\ObjectAccess\Resource\ResolvedNull;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedScalar;
 use Light\ObjectAccess\Resource\ResolvedValue;
@@ -104,4 +105,24 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf(Post::class, $post);
 		$this->assertEquals(PostType::$autoId-1, $post->getId());
 	}
+
+	public function testReadNullProperty()
+	{
+		$typeHelper = $this->typeRegistry->getComplexTypeHelper(Post::class);
+		$collectionHelper = $this->typeRegistry->getCollectionTypeHelper(Post::class . "[]");
+
+		$database = $this->setup->getDatabase();
+		$post = $database->getPost(4043);
+		$resolvedPost = ResolvedValue::create($typeHelper, $post, EmptyResourceAddress::create(), Origin::unavailable());
+
+		// There is no Author object assigned - the value of resolvedAuthor is NULL.
+		$resolvedAuthor = $typeHelper->readProperty($resolvedPost, "author");
+		$this->assertNotNull($resolvedAuthor);
+		$this->assertInstanceOf(ResolvedNull::class, $resolvedAuthor);
+
+		$this->assertInstanceOf(Origin_PropertyOfObject::class, $resolvedAuthor->getOrigin());
+		$this->assertSame($resolvedAuthor->getOrigin()->getObject(), $resolvedPost);
+		$this->assertEquals($resolvedAuthor->getOrigin()->getPropertyName(), "author");
+	}
+
 }

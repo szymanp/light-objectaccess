@@ -140,7 +140,7 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 			else
 			{
 				throw new Exception("PostCollectionType only supports Author objects, not %1::%2",
-					get_class($origin->getObject()),
+					get_class($object),
 					$origin->getPropertyName());
 			}
 		}

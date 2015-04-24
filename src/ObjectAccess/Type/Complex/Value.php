@@ -25,6 +25,15 @@ abstract class Value
 	{
 		return new Value_Unavailable($typeName);
 	}
+
+	/**
+	 * A null value.
+	 * @return Value_NotExists
+	 */
+	public static function notExists()
+	{
+		return new Value_NotExists();
+	}
 }
 
 final class Value_Concrete extends Value
@@ -61,5 +70,12 @@ final class Value_Unavailable extends Value
 	public function getTypeName()
 	{
 		return $this->typeName;
+	}
+}
+
+final class Value_NotExists extends Value
+{
+	protected function __construct()
+	{
 	}
 }

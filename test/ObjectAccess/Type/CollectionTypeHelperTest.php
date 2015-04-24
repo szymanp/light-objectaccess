@@ -113,6 +113,6 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 
 		$result = $helper->applyScope($coll, Scope::createEmptyScope());
 		$this->assertInstanceOf(ResolvedCollectionValue::class, $result);
-		$this->assertEquals(3, count($result->getValue()));
+		$this->assertEquals(4, count($result->getValue()));
 	}
 }

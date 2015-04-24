@@ -6,6 +6,8 @@ use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Query\Argument\Criterion;
 use Light\ObjectAccess\Query\Query;
+use Light\ObjectAccess\Resource\ResolvedNull;
+use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Type\ComplexTypeHelper;
 
 class QueryFilterIterator extends \FilterIterator
@@ -38,7 +40,19 @@ class QueryFilterIterator extends \FilterIterator
 		foreach($this->query->getArgumentLists() as $propertyName => $argumentList)
 		{
 			// Extract the current property value
-			$value = $this->elementTypeHelper->readProperty($this->elementTypeHelper->resolveValue($element), $propertyName)->getValue();
+			$resource = $this->elementTypeHelper->readProperty($this->elementTypeHelper->resolveValue($element), $propertyName);
+			if ($resource instanceof ResolvedValue)
+			{
+				$value = $resource->getValue();
+			}
+			elseif ($resource instanceof ResolvedNull)
+			{
+				$value = null;
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
 
 			foreach($argumentList as $argument)
 			{

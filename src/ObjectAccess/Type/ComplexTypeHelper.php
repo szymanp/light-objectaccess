@@ -6,6 +6,7 @@ use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
+use Light\ObjectAccess\Resource\ResolvedNull;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
@@ -13,6 +14,7 @@ use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Complex\Create;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
+use Light\ObjectAccess\Type\Complex\Value_NotExists;
 use Light\ObjectAccess\Type\Complex\Value_Unavailable;
 
 class ComplexTypeHelper extends TypeHelper
@@ -58,7 +60,7 @@ class ComplexTypeHelper extends TypeHelper
 
 	public function deleteResource(Transaction $transaction)
 	{
-
+		// TODO
 	}
 
 	/**
@@ -109,8 +111,19 @@ class ComplexTypeHelper extends TypeHelper
 			else
 			{
 				// We only support unavailable values for collections.
-				throw new NotImplementedException();
+				throw new NotImplementedException("Unavailable values are currently only supported for collections");
 			}
+		}
+		elseif ($value instanceof Value_NotExists)
+		{
+			$resultTypeName = $property->getTypeName();
+			if (is_null($resultTypeName))
+			{
+				throw new TypeException("Property %1::%2 does not have type information", $this->getName(), $propertyName);
+			}
+			$resultType = $this->typeRegistry->getTypeHelperByName($resultTypeName);
+
+			return new ResolvedNull($resultType, $resourceAddress, $origin);
 		}
 
 		throw new \LogicException();

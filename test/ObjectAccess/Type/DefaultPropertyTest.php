@@ -6,6 +6,7 @@ use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\Transaction\Util\DummyTransaction;
+use Light\ObjectAccess\Type\Complex\Value_NotExists;
 use Light\ObjectAccess\Type\Util\DefaultComplexType;
 use Light\ObjectAccess\Type\Util\DefaultProperty;
 
@@ -22,6 +23,8 @@ class DefaultPropertyTest extends \PHPUnit_Framework_TestCase
 		$type->addProperty(new DefaultProperty("name"));
 		$type->addProperty(new DefaultProperty("surname"));
 		$type->addProperty(new DefaultProperty("age"));
+		$type->addProperty(new DefaultProperty("manager", "Light\ObjectAccess\Type\DefaultPropertyTest_TestObject"));
+
 	}
 
 	public function testReadingAndWriting()
@@ -35,6 +38,16 @@ class DefaultPropertyTest extends \PHPUnit_Framework_TestCase
 
 		$this->type->getProperty("name")->writeProperty($ro, "Max", new DummyTransaction());
 		$this->assertEquals("Max", $ob->getName());
+	}
+
+	public function testMissingValue()
+	{
+		$ob = new DefaultPropertyTest_TestObject();
+		$ob->age = null;
+
+		$ro = ResolvedValue::create(new DefaultPropertyTest_TypeHelper, $ob, EmptyResourceAddress::create(), Origin::unavailable());
+		$this->assertInstanceOf(Value_NotExists::class, $this->type->getProperty("age")->readProperty($ro));
+		$this->assertInstanceOf(Value_NotExists::class, $this->type->getProperty("manager")->readProperty($ro));
 	}
 
 	/**
@@ -77,6 +90,7 @@ class DefaultPropertyTest_TestObject
 	private $name = "John";
 	private $surname = "Doe";
 	public $age = 35;
+	public $manager = null;
 
 	/**
 	 * @return string
