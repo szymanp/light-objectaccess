@@ -6,6 +6,7 @@ use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Query\Argument\Criterion;
 use Light\ObjectAccess\Query\Query;
+use Light\ObjectAccess\Query\QueryEmpty;
 use Light\ObjectAccess\Resource\ResolvedNull;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Type\ComplexTypeHelper;
@@ -21,10 +22,14 @@ class QueryFilterIterator extends \FilterIterator
 	{
 		parent::__construct($iterator);
 		$this->query = $query;
-		$this->elementTypeHelper = $this->query->getCollectionTypeHelper()->getBaseTypeHelper();
-		if (!($this->elementTypeHelper instanceof ComplexTypeHelper))
+
+		if (!($query instanceof QueryEmpty))
 		{
-			throw new TypeException("This class only supports collections of objects");
+			$this->elementTypeHelper = $this->query->getCollectionTypeHelper()->getBaseTypeHelper();
+			if (!($this->elementTypeHelper instanceof ComplexTypeHelper))
+			{
+				throw new TypeException("This class only supports collections of objects");
+			}
 		}
 	}
 
@@ -36,6 +41,11 @@ class QueryFilterIterator extends \FilterIterator
 	public function accept()
 	{
 		$element = parent::current();
+
+		if ($this->query instanceof QueryEmpty)
+		{
+			return true;
+		}
 
 		foreach($this->query->getArgumentLists() as $propertyName => $argumentList)
 		{

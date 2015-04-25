@@ -18,6 +18,15 @@ abstract class Query
 	}
 
 	/**
+	 * Returns a new query object that cannot be modified and is empty.
+	 * @return QueryEmpty
+	 */
+	public static function emptyQuery()
+	{
+		return new QueryEmpty();
+	}
+
+	/**
 	 * Appends a new query argument to this property.
 	 * @param string        $propertyName
 	 * @param QueryArgument $argument

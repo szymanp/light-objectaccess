@@ -19,6 +19,8 @@ final class QueryScope extends Scope
 	protected function __construct(Query $query, $count = null, $offset = null)
 	{
 		$this->query = $query;
+		$this->count = $count;
+		$this->offset = $offset;
 	}
 
 	/**

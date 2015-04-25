@@ -1,6 +1,8 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
+use Light\ObjectAccess\Query\Query;
+use Light\ObjectAccess\Query\QueryEmpty;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\Origin_ElementInCollection;
@@ -12,6 +14,7 @@ use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\TestData\Post;
 use Light\ObjectAccess\TestData\Setup;
 use Light\ObjectAccess\Transaction\Util\DummyTransaction;
+use Light\ObjectAccess\Type\Util\EmptySearchContext;
 
 include_once("test/ObjectAccess/TestData/Setup.php");
 
@@ -104,6 +107,21 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$elements = iterator_to_array($iterator);
 		$this->assertEquals(1, count($elements));
 		$this->assertSame($this->setup->getDatabase()->getPost(4040), $elements[4040]->getValue());
+	}
+
+	public function testQueryCollectionWithEmptyQuery()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$scope = Scope::createWithQuery(Query::emptyQuery(), 2, 1);
+		$iterator = $helper->getIteratorWithScope($coll, $scope);
+
+		$elements = iterator_to_array($iterator);
+		$this->assertEquals(2, count($elements));
+		$this->assertSame($this->setup->getDatabase()->getPost(4041), $elements[4041]->getValue());
+		$this->assertSame($this->setup->getDatabase()->getPost(4042), $elements[4042]->getValue());
 	}
 
 	public function testApplyScope()
