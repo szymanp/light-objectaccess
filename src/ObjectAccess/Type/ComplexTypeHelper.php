@@ -50,7 +50,9 @@ class ComplexTypeHelper extends TypeHelper
 		if ($type instanceof Create)
 		{
 			$object = $type->createObject($transaction);
-			return new ResolvedObject($this, $object, EmptyResourceAddress::create(), Origin::unavailable());
+			$resource = new ResolvedObject($this, $object, EmptyResourceAddress::create(), Origin::unavailable());
+			$transaction->markAsCreated($resource);
+			return $resource;
 		}
 		else
 		{
@@ -148,6 +150,7 @@ class ComplexTypeHelper extends TypeHelper
 		}
 
 		$property->writeProperty($resource, $value, $transaction);
+		$transaction->markAsChanged($resource);
 	}
 
 	/**

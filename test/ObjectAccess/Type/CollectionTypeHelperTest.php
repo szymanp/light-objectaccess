@@ -57,9 +57,13 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 
 		$post = new Post();
 		$post->setId(5050);
-		$helper->appendValue($coll, $post, new DummyTransaction());
+		$helper->appendValue($coll, $post, $tx = new DummyTransaction());
 
 		$this->assertSame($post, $this->setup->getDatabase()->getPost(5050));
+
+		// Check the transaction
+		$this->assertContains($coll, $tx->getChangedResources());
+		$this->assertEquals(1, count($tx->getChangedResources()));
 	}
 
 	public function testIterate()

@@ -107,7 +107,7 @@ class DefaultProperty extends AbstractProperty
 				$wrapped = Helper::wrap($object->getValue());
 				$wrapped->setValue($this->getName(), $value);
 			}
-			$transaction->saveDirty($object);
+			$transaction->markAsChanged($object);
 		}
 		catch (\Exception $e)
 		{

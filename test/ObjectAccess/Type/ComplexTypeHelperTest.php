@@ -72,6 +72,10 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotEquals("James Bond", $author->name);
 		$resolved->getTypeHelper()->writeProperty($resolved, "name", "James Bond", $transaction);
 		$this->assertEquals("James Bond", $author->name);
+
+		// Check the transaction
+		$this->assertContains($resolved, $transaction->getChangedResources());
+		$this->assertEquals(1, count($transaction->getChangedResources()));
 	}
 
 	public function testReadCollectionResourceProperty()
@@ -95,7 +99,7 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 	public function testCreate()
 	{
 		$typeHelper = $this->typeRegistry->getComplexTypeHelper(Post::class);
-		$resource = $typeHelper->createResource(new DummyTransaction());
+		$resource = $typeHelper->createResource($tx = new DummyTransaction());
 
 		$this->assertInstanceOf(ResolvedObject::class, $resource);
 		$this->assertInstanceOf(EmptyResourceAddress::class, $resource->getAddress());
@@ -104,6 +108,9 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$post = $resource->getValue();
 		$this->assertInstanceOf(Post::class, $post);
 		$this->assertEquals(PostType::$autoId-1, $post->getId());
+		// Check the transaction
+		$this->assertContains($resource, $tx->getCreatedResources());
+		$this->assertEquals(1, count($tx->getCreatedResources()));
 	}
 
 	public function testReadNullProperty()

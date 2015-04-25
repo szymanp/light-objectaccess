@@ -189,6 +189,7 @@ class CollectionTypeHelper extends TypeHelper
 		if ($this->type instanceof Append)
 		{
 			$this->type->appendValue($collection, $value, $transaction);
+			$transaction->markAsChanged($collection);
 		}
 		else
 		{
