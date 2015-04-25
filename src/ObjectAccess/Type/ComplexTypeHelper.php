@@ -12,6 +12,7 @@ use Light\ObjectAccess\Resource\ResolvedResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\Transaction\Transaction;
+use Light\ObjectAccess\Type\Complex\CanonicalAddress;
 use Light\ObjectAccess\Type\Complex\Create;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Type\Complex\Value_NotExists;
@@ -50,7 +51,9 @@ class ComplexTypeHelper extends TypeHelper
 		if ($type instanceof Create)
 		{
 			$object = $type->createObject($transaction);
-			$resource = new ResolvedObject($this, $object, EmptyResourceAddress::create(), Origin::unavailable());
+			$address = ($type instanceof CanonicalAddress) ? $address = $type->getCanonicalAddress($object) : EmptyResourceAddress::create();
+
+			$resource = new ResolvedObject($this, $object, $address, Origin::unavailable());
 			$transaction->markAsCreated($resource);
 			return $resource;
 		}

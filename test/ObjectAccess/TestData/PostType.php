@@ -1,12 +1,15 @@
 <?php
 namespace Light\ObjectAccess\TestData;
 
+use Light\Exception\InvalidParameterType;
+use Light\ObjectAccess\Resource\Addressing\ResourceAddress;
 use Light\ObjectAccess\Transaction\Transaction;
+use Light\ObjectAccess\Type\Complex\CanonicalAddress;
 use Light\ObjectAccess\Type\Complex\Create;
 use Light\ObjectAccess\Type\Util\DefaultComplexType;
 use Light\ObjectAccess\Type\Util\DefaultProperty;
 
-class PostType extends DefaultComplexType implements Create
+class PostType extends DefaultComplexType implements Create, CanonicalAddress
 {
 	public static $autoId = 9090;
 
@@ -28,8 +31,23 @@ class PostType extends DefaultComplexType implements Create
 	{
 		$newPost = new Post();
 		$newPost->setId(self::$autoId++);
-		// TODO Fix transaction
-		// $transaction->saveDirty($newPost);
 		return $newPost;
+	}
+
+	/**
+	 * Returns a canonical address for the specified object.
+	 * @param mixed $object
+	 * @return ResourceAddress
+	 */
+	public function getCanonicalAddress($object)
+	{
+		if ($object instanceof Post)
+		{
+			return new DummyAddress("//post/" . $object->getId());
+		}
+		else
+		{
+			throw new InvalidParameterType('$object', $object, Post::class);
+		}
 	}
 }

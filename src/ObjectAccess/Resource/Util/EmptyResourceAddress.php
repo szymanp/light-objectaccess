@@ -43,7 +43,7 @@ final class EmptyResourceAddress implements ResourceAddress
 
 	public function hasStringForm()
 	{
-		return true;
+		return false;
 	}
 
 	public function getAsString()

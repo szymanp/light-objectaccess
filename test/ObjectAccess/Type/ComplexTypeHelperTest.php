@@ -12,6 +12,7 @@ use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\TestData\Author;
 use Light\ObjectAccess\TestData\Database;
+use Light\ObjectAccess\TestData\DummyAddress;
 use Light\ObjectAccess\TestData\Post;
 use Light\ObjectAccess\TestData\PostType;
 use Light\ObjectAccess\TestData\Setup;
@@ -102,7 +103,8 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$resource = $typeHelper->createResource($tx = new DummyTransaction());
 
 		$this->assertInstanceOf(ResolvedObject::class, $resource);
-		$this->assertInstanceOf(EmptyResourceAddress::class, $resource->getAddress());
+		$this->assertInstanceOf(DummyAddress::class, $resource->getAddress());
+		$this->assertEquals("//post/" . $resource->getValue()->getId(), $resource->getAddress()->getAsString());
 		$this->assertInstanceOf(Origin_Unavailable::class, $resource->getOrigin());
 
 		$post = $resource->getValue();
