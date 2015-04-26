@@ -33,9 +33,27 @@ interface Transaction
 	 */
 	public function getDeletedResources();
 
+	/**
+	 * Begin the transaction.
+	 */
 	public function begin();
-	
+
+	/**
+	 * Transfer changes done in this transaction, but do not commit yet.
+	 *
+	 * With some ORM systems object are first modified, then the changes are transferred to the database,
+	 * and finally, the database changes are committed. This method is intended to carry out the step
+	 * of transferring the changes to the database.
+	 */
+	public function transfer();
+
+	/**
+	 * Commit the changes done in this transaction.
+	 */
 	public function commit();
-	
+
+	/**
+	 * Rollback the changes done in this transaction.
+	 */
 	public function rollback();
 }

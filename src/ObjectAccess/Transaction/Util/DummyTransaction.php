@@ -10,6 +10,10 @@ final class DummyTransaction extends AbstractTransaction
 	{
 	}
 
+	public function transfer()
+	{
+	}
+
 	public function commit()
 	{
 	}
