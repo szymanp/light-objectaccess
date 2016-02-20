@@ -19,7 +19,7 @@ class Author
 		$type = new DefaultComplexType(Author::class);
 		$type->addProperty(new DefaultProperty("id", "int"));
 		$type->addProperty(new DefaultProperty("name", "string"));
-		$type->addProperty(new DefaultProperty("age"));
+		$type->addProperty(new DefaultProperty("age", "int"));
 		$type->addProperty(new CollectionResourceProperty("posts", Post::class . "[]"));
 		return $type;
 	}
