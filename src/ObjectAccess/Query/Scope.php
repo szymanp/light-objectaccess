@@ -1,8 +1,6 @@
 <?php
 namespace Light\ObjectAccess\Query;
 
-use Light\Exception\Exception;
-
 /**
  * Scope specifies the filtering restrictions and ordering of a collection.
  *

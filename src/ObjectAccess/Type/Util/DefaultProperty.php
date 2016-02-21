@@ -5,7 +5,6 @@ use Light\Data\Helper;
 use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Transaction\Transaction;
-use Light\ObjectAccess\Type\Complex\Property;
 use Light\ObjectAccess\Type\Complex\Value;
 
 /**

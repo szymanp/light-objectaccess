@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type\Util;
 
-use Light\Exception\Exception;
+use Szyman\Exception\Exception;
 use Light\Exception\InvalidReturnValue;
 use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;

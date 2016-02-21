@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type\Util;
 
-use Light\Exception\Exception;
+use Szyman\Exception\Exception;
 use Light\ObjectAccess\Type\Collection\Property;
 
 class CollectionPropertyHost implements \IteratorAggregate, \ArrayAccess

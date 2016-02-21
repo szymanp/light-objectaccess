@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type\Util;
 
-use Light\Exception\Exception;
+use Szyman\Exception\Exception;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Complex\Value;

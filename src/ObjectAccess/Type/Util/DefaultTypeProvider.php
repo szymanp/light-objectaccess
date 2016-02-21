@@ -1,9 +1,8 @@
 <?php
 namespace Light\ObjectAccess\Type\Util;
 
-use Light\Exception\Exception;
+use Szyman\Exception\Exception;
 use Light\Exception\InvalidParameterValue;
-use Light\Exception\NotImplementedException;
 use Light\ObjectAccess\Type\CollectionType;
 use Light\ObjectAccess\Type\ComplexType;
 use Light\ObjectAccess\Type\SimpleType;
