@@ -115,50 +115,62 @@ class DefaultProperty extends AbstractProperty
 	}
 
 	/**
-	 * @param string $name
+	 * @param $name
+	 * @return $this
 	 */
 	public function setName($name)
 	{
 		$this->name = $name;
+		return $this;
 	}
 
 	/**
 	 * @param string $typeName
+	 * @return $this
 	 */
 	public function setTypeName($typeName)
 	{
 		$this->typeName = $typeName;
+		return $this;
 	}
 
 	/**
 	 * @param boolean $readable
+	 * @return $this
 	 */
 	public function setReadable($readable)
 	{
 		$this->readable = $readable;
+		return $this;
 	}
 
 	/**
 	 * @param boolean $writable
+	 * @return $this
 	 */
 	public function setWritable($writable)
 	{
 		$this->writable = $writable;
+		return $this;
 	}
 
 	/**
 	 * @param \Closure $getter	A function of the form: mixed getter(Property $property, object $object)
+	 * @return $this
 	 */
 	public function setGetter(\Closure $getter)
 	{
 		$this->getter = $getter;
+		return $this;
 	}
 
 	/**
 	 * @param \Closure $setter	A function of the form: void setter(Property $property, object $object, $value)
+	 * @return $this
 	 */
 	public function setSetter(\Closure $setter)
 	{
 		$this->setter = $setter;
+		return $this;
 	}
 }
