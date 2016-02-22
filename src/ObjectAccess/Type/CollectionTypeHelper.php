@@ -1,8 +1,8 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
-use Light\Exception\InvalidReturnValue;
-use Light\Exception\NotImplementedException;
+use Szyman\Exception\UnexpectedValueException;
+use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Query\Scope\EmptyScope;
@@ -140,7 +140,7 @@ class CollectionTypeHelper extends TypeHelper
 			$collectionValue = $this->type->find($collection, $scope, $context);
 			if (!$this->isValidValue($collectionValue))
 			{
-				throw new InvalidReturnValue(get_class($this->type), "find", $collectionValue, "A value valid for this type");
+				throw UnexpectedValueException::newInvalidReturnValue($this->type, "find", $collectionValue, "Not a valid value for this type");
 			}
 			$address = $collection->getAddress()->appendScope($scope);
 			return new ResolvedCollectionValue($this, $collectionValue, $address, $collection->getOrigin());

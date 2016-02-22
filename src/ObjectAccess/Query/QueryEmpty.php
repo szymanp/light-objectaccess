@@ -1,10 +1,8 @@
 <?php
 namespace Light\ObjectAccess\Query;
 
-use Light\Exception\NotImplementedException;
-use Light\ObjectAccess\Exception\TypeException;
+use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Query\Argument\QueryArgument;
-use Light\ObjectAccess\Type\CollectionTypeHelper;
 
 final class QueryEmpty extends Query
 {

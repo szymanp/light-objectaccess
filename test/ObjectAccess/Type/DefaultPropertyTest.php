@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
-use Light\Exception\NotImplementedException;
+use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;

@@ -2,7 +2,6 @@
 namespace Light\ObjectAccess\Type\Util;
 
 use Szyman\Exception\Exception;
-use Light\Exception\InvalidParameterValue;
 use Light\ObjectAccess\Type\CollectionType;
 use Light\ObjectAccess\Type\ComplexType;
 use Light\ObjectAccess\Type\SimpleType;
@@ -47,7 +46,7 @@ class DefaultTypeProvider implements TypeProvider
 	{
 		if (in_array($type, $this->types, true))
 		{
-			throw new InvalidParameterValue('$type', $type, "Type is already registered with this provider");
+			throw new Exception("Type %1 is already registered with this provider", $type);
 		}
 
 		if (is_null($name))

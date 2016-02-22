@@ -1,8 +1,8 @@
 <?php
 namespace Light\ObjectAccess\TestData;
 
-use Light\Exception\Exception;
-use Light\Exception\NotImplementedException;
+use Szyman\Exception\Exception;
+use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Query\Query;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Query\Scope\Scope_Query;

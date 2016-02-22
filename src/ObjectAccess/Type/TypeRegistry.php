@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
-use Light\Exception\InvalidParameterType;
+use Szyman\Exception\InvalidArgumentException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedValue;
@@ -53,7 +53,7 @@ class TypeRegistry
 	{
 		if (!is_string($typeName))
 		{
-			throw new InvalidParameterType('$typeName', $typeName, "string");
+			throw InvalidArgumentException::newInvalidType('$typeName', $typeName, "string");
 		}
 		$type = $this->typeProvider->getTypeByName($typeName);
 		if (is_null($type))

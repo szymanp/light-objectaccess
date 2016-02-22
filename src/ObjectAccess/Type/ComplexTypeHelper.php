@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
-use Light\Exception\NotImplementedException;
+use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Exception\TypeException;
 use Light\ObjectAccess\Resource\Origin;

@@ -11,7 +11,7 @@ use Light\ObjectAccess\Type\Complex\Value;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Type\Complex\Value_Concrete;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
-use Light\Exception\NotImplementedException;
+use Szyman\Exception\NotImplementedException;
 
 /**
  * An iterator that wraps objects from another iterator into resource objects.

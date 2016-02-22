@@ -2,7 +2,7 @@
 namespace Light\ObjectAccess\Type\Util;
 
 use Szyman\Exception\Exception;
-use Light\Exception\InvalidReturnValue;
+use Szyman\Exception\UnexpectedValueException;
 use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedCollectionValue;
@@ -53,7 +53,7 @@ class DefaultCollectionType implements CollectionType
 			$result = $this->getElementAtKeyFromResource($coll, $key);
 			if (!($result instanceof Element))
 			{
-				throw new InvalidReturnValue("Closure", "", $result, "Expected Element object");
+				throw UnexpectedValueException::newInvalidReturnValue("Closure", "", $result, "Expected Element object");
 			}
 			return $result;
 		}
