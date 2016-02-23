@@ -12,18 +12,11 @@
     ],
     "require": {
         "szyman/common-exceptions": "dev-master",
-        "light/light": "dev-master",
         "php": ">=5.3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/szymanp/light"
-        }
-    ],
     "autoload": {
         "psr-4": { "Light\\ObjectAccess\\": "src/ObjectAccess/" }
     }

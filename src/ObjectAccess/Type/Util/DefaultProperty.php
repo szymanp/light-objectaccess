@@ -1,7 +1,6 @@
 <?php
 namespace Light\ObjectAccess\Type\Util;
 
-use Light\Data\Helper;
 use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Transaction\Transaction;
@@ -74,8 +73,8 @@ class DefaultProperty extends AbstractProperty
 			}
 			else
 			{
-				$wrapped = Helper::wrap($object->getValue());
-				$rawValue = $wrapped->getValue($this->getName());
+				$mutator = new PhpObjectMutator($object->getValue());
+				$rawValue = $mutator->getPropertyValue($this->getName());
 			}
 			return is_null($rawValue) ? Value::notExists() : Value::of($rawValue);
 		}
@@ -103,8 +102,8 @@ class DefaultProperty extends AbstractProperty
 			}
 			else
 			{
-				$wrapped = Helper::wrap($object->getValue());
-				$wrapped->setValue($this->getName(), $value);
+				$mutator = new PhpObjectMutator($object->getValue());
+				$mutator->setPropertyValue($this->getName(), $value);
 			}
 			$transaction->markAsChanged($object);
 		}
