@@ -69,6 +69,35 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(1, count($tx->getChangedResources()));
 	}
 
+	public function testSetWithKey()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$post = new Post();
+		$helper->setValue($coll, 5050, $post, $tx = new DummyTransaction());
+
+		$this->assertSame($post, $this->setup->getDatabase()->getPost(5050));
+
+		// Check the transaction
+		$this->assertContains($coll, $tx->getChangedResources());
+		$this->assertEquals(1, count($tx->getChangedResources()));
+	}
+
+	/**
+	 * @expectedException Szyman\Exception\InvalidArgumentException
+	 */
+	public function testSetWithKeyInvalidKeyType()
+	{
+		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");
+
+		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
+
+		$post = new Post();
+		$helper->setValue($coll, "5050", $post, $tx = new DummyTransaction());
+	}
+
 	public function testIterate()
 	{
 		$helper = $this->setup->getTypeRegistry()->getCollectionTypeHelper(Post::class . "[]");

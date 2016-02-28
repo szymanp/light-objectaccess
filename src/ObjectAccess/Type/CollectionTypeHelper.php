@@ -1,6 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type;
 
+use Light\ObjectAccess\Type\Collection\SetElementAtKey;
 use Szyman\Exception\UnexpectedValueException;
 use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
@@ -194,6 +195,27 @@ class CollectionTypeHelper extends TypeHelper
 		else
 		{
 			throw new TypeException("Type %1 does not support appending", $this->getName());
+		}
+	}
+
+	/**
+	 * Sets a value in the collection at the specified key.
+	 * @param ResolvedCollection $collection
+	 * @param mixed              $key
+	 * @param mixed              $value
+	 * @param Transaction        $transaction
+	 * @throws TypeException	If the type does not support setting elements by key.
+	 */
+	public function setValue(ResolvedCollection $collection, $key, $value, Transaction $transaction)
+	{
+		if ($this->type instanceof SetElementAtKey)
+		{
+			$this->type->setElementAtKey($collection, $key, $value, $transaction);
+			$transaction->markAsChanged($collection);
+		}
+		else
+		{
+			throw new TypeException("Type %1 does not support setting values with a key", $this->getName());
 		}
 	}
 

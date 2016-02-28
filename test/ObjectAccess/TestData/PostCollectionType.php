@@ -1,7 +1,9 @@
 <?php
 namespace Light\ObjectAccess\TestData;
 
+use Light\ObjectAccess\Type\Collection\SetElementAtKey;
 use Szyman\Exception\Exception;
+use Szyman\Exception\InvalidArgumentException;
 use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Query\Query;
 use Light\ObjectAccess\Query\Scope;
@@ -24,7 +26,7 @@ use Light\ObjectAccess\Type\Util\DefaultFilterableProperty;
 
 include_once("test/ObjectAccess/TestData/QueryFilterIterator.php");
 
-class PostCollectionType extends DefaultCollectionType implements Append, Iterate, Search
+class PostCollectionType extends DefaultCollectionType implements Append, Iterate, Search, SetElementAtKey
 {
 	/** @var Database */
 	private $database;
@@ -172,5 +174,28 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 		$innerIterator = new \ArrayIterator($this->read($collection));
 		$iterator = new \LimitIterator(new QueryFilterIterator($innerIterator, $scope->getQuery()), $offset, $count);
 		return iterator_to_array($iterator);
+	}
+
+	/**
+	 * Sets the value of the element in the collection at the specified key.
+	 *
+	 * @param \Light\ObjectAccess\Type\Collection\ResolvedCollection        $collection
+	 * @param mixed              $key
+	 * @param mixed              $value
+	 * @param \Light\ObjectAccess\Type\Collection\Transaction $transaction
+	 */
+	public function setElementAtKey(ResolvedCollection $collection, $key, $value, Transaction $transaction)
+	{
+		if (!is_int($key)) throw InvalidArgumentException::newInvalidType('key', $key, 'integer');
+
+		if ($collection->getOrigin() instanceof Origin_Unavailable)
+		{
+			$value->setId($key);
+			$this->database->addPost($value);
+		}
+		else
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
