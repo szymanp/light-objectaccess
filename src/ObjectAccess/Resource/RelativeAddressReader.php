@@ -10,6 +10,9 @@ class RelativeAddressReader
 {
 	/** @var RelativeAddress */
 	private $relativeAddress;
+	
+	/** @var ResolutionTrace */
+	private $resolutionTrace;
 
 	public function __construct(RelativeAddress $relativeAddress)
 	{
@@ -28,6 +31,8 @@ class RelativeAddressReader
 		$count 		  = count($pathElements);
 		$resource	  = $this->relativeAddress->getSourceResource();
 		
+		$this->resolutionTrace = new ResolutionTrace($resource);
+		
 		foreach($pathElements as $index => $element)
 		{
 			try
@@ -37,6 +42,10 @@ class RelativeAddressReader
 				if (is_null($resource))
 				{
 					return null;
+				}
+				else
+				{
+					$this->resolutionTrace->append($element, $resource, $index + 1 == $count);
 				}
 			}
 			catch (\Exception $e)
@@ -52,6 +61,15 @@ class RelativeAddressReader
 		}
 
 		return $resource;
+	}
+	
+	/**
+	 * Returns information about every step in the path resolution of the last read() call.
+	 * @return ResolutionTrace
+	 */
+	public function getLastResolutionTrace()
+	{
+		return $this->resoultionTrace;
 	}
 
 	/**
