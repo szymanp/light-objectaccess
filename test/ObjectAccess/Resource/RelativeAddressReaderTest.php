@@ -101,4 +101,33 @@ class RelativeAddressReaderTest extends \PHPUnit_Framework_TestCase
 		$reader = new RelativeAddressReader($addr);
 		$reader->read();
 	}
+
+	public function testTraceOnReadElementFromCollectionProperty()
+	{
+		$author = $this->setup->getDatabase()->getAuthor(1020);
+		$authorResource = $this->setup->getTypeRegistry()->resolveValue($author);
+
+		$addr = new DefaultRelativeAddress($authorResource);
+		$addr->appendElement("posts");
+		$addr->appendIndex(0);
+
+		$reader = new RelativeAddressReader($addr);
+		$result = $reader->read();
+
+		$trace = $reader->getLastResolutionTrace();
+		$this->assertInstanceOf(ResolutionTrace::class, $trace);
+		$this->assertEquals(2, count($trace));
+		$this->assertTrue($trace->isFinalized());
+
+		$list = iterator_to_array($trace->getIterator());
+		$this->assertEquals($list[0]->getPathElement(), "posts");
+		$this->assertEquals($list[1]->getPathElement(), 0);
+
+		$this->assertInstanceOf(ResolvedCollectionResource::class, $list[0]->getResource());
+		$this->assertSame($list[1]->getResource(), $result);
+
+		$this->assertSame($list[0], $trace->first());
+		$this->assertSame($list[1], $trace->last());
+	}
+
 }

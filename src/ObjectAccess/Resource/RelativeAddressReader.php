@@ -69,7 +69,7 @@ class RelativeAddressReader
 	 */
 	public function getLastResolutionTrace()
 	{
-		return $this->resoultionTrace;
+		return $this->resolutionTrace;
 	}
 
 	/**

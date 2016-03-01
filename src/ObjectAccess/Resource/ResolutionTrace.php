@@ -38,6 +38,7 @@ class ResolutionTrace implements \IteratorAggregate, \Countable
 		}
 		
 		$this->trace[] = new ResolutionTrace_Element($pathElement, $resource);
+		$this->finalized = $isFinal;
 	}
 
 	public function count()
@@ -48,6 +49,33 @@ class ResolutionTrace implements \IteratorAggregate, \Countable
 	public function getIterator()
 	{
 		return new \ArrayIterator($this->trace);
+	}
+
+	/**
+	 * Returns the first resolved element in the path.
+	 * @return ResolutionTrace_Element
+	 */
+	public function first()
+	{
+		return (count($this->trace) > 0) ? $this->trace[0] : null;
+	}
+
+	/**
+	 * Returns the last resolved element in the path.
+	 * @return ResolutionTrace_Element
+	 */
+	public function last()
+	{
+		return (count($this->trace) > 0) ? $this->trace[count($this->trace) - 1] : null;
+	}
+
+	/**
+	 * Returns true if the entire path was resolved.
+	 * @return boolean
+	 */
+	public function isFinalized()
+	{
+		return $this->finalized;
 	}
 }
 
