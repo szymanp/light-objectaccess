@@ -36,8 +36,10 @@ class ResolutionTrace implements \IteratorAggregate, \Countable
 		{
 			throw new Exception("The trace has been finalized. No more elements can be appended");
 		}
-		
-		$this->trace[] = new ResolutionTrace_Element($pathElement, $resource);
+
+		$previous = count($this->trace) > 0 ? $this->trace[count($this->trace) - 1] : null;
+
+		$this->trace[] = new ResolutionTrace_Element($pathElement, $resource, $previous);
 		$this->finalized = $isFinal;
 	}
 
@@ -83,11 +85,13 @@ final class ResolutionTrace_Element
 {
 	private $pathElement;
 	private $resource;
+	private $previous;
 
-	public function __construct($pathElement, ResolvedResource $resource)
+	public function __construct($pathElement, ResolvedResource $resource, ResolutionTrace_Element $previous = null)
 	{
 		$this->pathElement = $pathElement;
 		$this->resource    = $resource;
+		$this->previous    = $previous;
 	}
 	
 	/**
@@ -106,5 +110,14 @@ final class ResolutionTrace_Element
 	public function getResource()
 	{
 		return $this->resource;
+	}
+
+	/**
+	 * Returns the previous element.
+	 * @return ResolutionTrace_Element
+	 */
+	public function previous()
+	{
+		return $this->previous;
 	}
 }
