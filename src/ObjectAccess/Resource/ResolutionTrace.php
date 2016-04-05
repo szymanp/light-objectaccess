@@ -8,8 +8,6 @@ use Szyman\Exception\Exception;
  */
 class ResolutionTrace implements \IteratorAggregate, \Countable
 {
-	/** @var ResolvedResource */
-	private $source;
 	/** @var ResolutionTrace_Element[] */
 	private $trace = array();
 	/** @var bool */
@@ -21,7 +19,7 @@ class ResolutionTrace implements \IteratorAggregate, \Countable
 	 */
 	public function __construct(ResolvedResource $source)
 	{
-		$this->source = $source;
+		$this->trace[] = new ResolutionTrace_Element(null, $source, null);
 	}
 
 	/**
@@ -87,7 +85,7 @@ final class ResolutionTrace_Element
 	private $resource;
 	private $previous;
 
-	public function __construct($pathElement, ResolvedResource $resource, ResolutionTrace_Element $previous = null)
+	public function __construct($pathElement = null, ResolvedResource $resource, ResolutionTrace_Element $previous = null)
 	{
 		$this->pathElement = $pathElement;
 		$this->resource    = $resource;
