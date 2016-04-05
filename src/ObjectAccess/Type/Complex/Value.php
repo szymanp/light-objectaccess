@@ -9,7 +9,7 @@ abstract class Value
 	/**
 	 * A concrete value.
 	 * @param mixed	$value
-	 * @return Value_Concrete
+	 * @return Value
 	 */
 	public static function of($value)
 	{
@@ -19,7 +19,7 @@ abstract class Value
 	/**
 	 * An unavailable value.
 	 * @param string $typeName
-	 * @return Value_Unavailable
+	 * @return Value
 	 */
 	public static function unavailable($typeName = null)
 	{
@@ -28,7 +28,7 @@ abstract class Value
 
 	/**
 	 * A null value.
-	 * @return Value_NotExists
+	 * @return Value
 	 */
 	public static function notExists()
 	{
