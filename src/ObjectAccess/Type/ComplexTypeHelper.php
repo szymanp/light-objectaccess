@@ -4,6 +4,7 @@ namespace Light\ObjectAccess\Type;
 use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\TypeCapabilityException;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
 use Light\ObjectAccess\Resource\ResolvedNull;
@@ -43,7 +44,7 @@ class ComplexTypeHelper extends TypeHelper
 	 * Creates a new resource of this type.
 	 * @param Transaction $transaction
 	 * @return ResolvedObject	Returns a resource object with an empty address and no origin.
-	 * @throws TypeException	If the type does not support creation of new resources.
+	 * @throws TypeCapabilityException If the type does not support creation of new resources.
 	 */
 	public function createResource(Transaction $transaction)
 	{
@@ -59,7 +60,7 @@ class ComplexTypeHelper extends TypeHelper
 		}
 		else
 		{
-			throw new TypeException("Type %1 does not support creation of objects", $this->getName());
+			throw new TypeCapabilityException($this, Create::class, 'Type does not support creation of objects');
 		}
 	}
 

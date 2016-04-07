@@ -5,6 +5,7 @@ use Light\ObjectAccess\Type\Collection\SetElementAtKey;
 use Szyman\Exception\UnexpectedValueException;
 use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\TypeCapabilityException;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Query\Scope\EmptyScope;
 use Light\ObjectAccess\Query\Scope\KeyScope;
@@ -49,7 +50,8 @@ class CollectionTypeHelper extends TypeHelper
 	 * Returns a helper for the type of the given search property.
 	 * @param string $propertyName
 	 * @return TypeHelper
-	 * @throws TypeException	If the underlying type does not support searching.
+	 * @throws TypeCapabilityException If the underlying type does not support searching.
+	 * @throws TypeException
 	 */
 	public function getSearchPropertyTypeHelper($propertyName)
 	{
@@ -64,7 +66,7 @@ class CollectionTypeHelper extends TypeHelper
 		}
 		else
 		{
-			throw new TypeException("Type %1 does not support search properties", $this->getName());
+			throw new TypeCapabilityException($this, Search::class, 'Type does not support search properties');
 		}
 	}
 
@@ -132,7 +134,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * @return ResolvedCollectionValue	A collection that contains all elements matching the scope.
 	 *                                 	This collection has the same origin as the input collection,
 	 *                                	and an address with the scope appended.
-	 * @throws TypeException        	If the type does not support searching.
+	 * @throws TypeCapabilityException	If the type does not support searching.
 	 */
 	public function queryCollection(ResolvedCollectionResource $collection, Scope\QueryScope $scope, SearchContext $context)
 	{
@@ -148,7 +150,7 @@ class CollectionTypeHelper extends TypeHelper
 		}
 		else
 		{
-			throw new TypeException("Type %1 does not support searching", $this->getName());
+			throw new TypeCapabilityException($this, Search::class, 'Type does not support searching');
 		}
 	}
 
@@ -158,7 +160,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * @return ResolvedCollectionValue	A collection that contains all values from the resource.
 	 *                                 	This collection has the same origin as the input collection,
 	 *                                	and an address with the scope appended.
-	 * @throws TypeException			If the type does not support iteration.
+	 * @throws TypeCapabilityException	If the type does not support iteration.
 	 */
 	public function readCollection(ResolvedCollectionResource $collection)
 	{
@@ -174,7 +176,7 @@ class CollectionTypeHelper extends TypeHelper
 		}
 		else
 		{
-			throw new TypeException("Type %1 does not support iteration", $this->getName());
+			throw new TypeCapabilityException($this, Iterate::class, 'Type does not support iteration');
 		}
 	}
 
@@ -183,7 +185,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * @param ResolvedCollection $collection
 	 * @param mixed              $value
 	 * @param Transaction        $transaction
-	 * @throws TypeException	 If the type does not support appending.
+	 * @throws TypeCapabilityException	If the type does not support appending.
 	 */
 	public function appendValue(ResolvedCollection $collection, $value, Transaction $transaction)
 	{
@@ -194,7 +196,7 @@ class CollectionTypeHelper extends TypeHelper
 		}
 		else
 		{
-			throw new TypeException("Type %1 does not support appending", $this->getName());
+			throw new TypeCapabilityException($this, Append::class, 'Type does not support appending');
 		}
 	}
 
@@ -204,7 +206,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * @param mixed              $key
 	 * @param mixed              $value
 	 * @param Transaction        $transaction
-	 * @throws TypeException	If the type does not support setting elements by key.
+	 * @throws TypeCapabilityException	If the type does not support setting elements by key.
 	 */
 	public function setValue(ResolvedCollection $collection, $key, $value, Transaction $transaction)
 	{
@@ -215,7 +217,7 @@ class CollectionTypeHelper extends TypeHelper
 		}
 		else
 		{
-			throw new TypeException("Type %1 does not support setting values with a key", $this->getName());
+			throw new TypeCapabilityException($this, SetElementAtKey::class, 'Type does not support setting values with a key');
 		}
 	}
 
@@ -223,7 +225,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * Returns an iterator over the elements in the given collection.
 	 * @param ResolvedCollection $collection
 	 * @return \Iterator
-	 * @throws TypeException	If the type does not support iteration.
+	 * @throws TypeCapabilityException If the type does not support iteration.
 	 */
 	public function getIterator(ResolvedCollection $collection)
 	{
@@ -247,7 +249,7 @@ class CollectionTypeHelper extends TypeHelper
 		}
 		else
 		{
-			throw new TypeException("Type %1 does not support iteration", $this->getName());
+			throw new TypeCapabilityException($this, Iterate::class, 'Type does not support iteration');
 		}
 	}
 
@@ -266,7 +268,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * @param Scope              			$scope
 	 * @return \Iterator
 	 * @throws NotImplementedException
-	 * @throws TypeException
+	 * @throws TypeCapabilityException
 	 */
 	public function getIteratorWithScope(ResolvedCollectionResource $collection, Scope $scope)
 	{

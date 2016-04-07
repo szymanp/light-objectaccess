@@ -2,6 +2,7 @@
 namespace Light\ObjectAccess\Query;
 
 use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\TypeCapabilityException;
 use Light\ObjectAccess\Query\Argument\QueryArgument;
 use Light\ObjectAccess\Type\Collection\Search;
 use Light\ObjectAccess\Type\CollectionTypeHelper;
@@ -22,7 +23,7 @@ class QueryConcrete extends Query
 
 		if (!($this->type instanceof Search))
 		{
-			throw new TypeException("Type %1 does not support searching", $this->typeHelper->getName());
+			throw new TypeCapabilityException($typeHelper, Search::class, 'Type does not support searching');
 		}
 	}
 
