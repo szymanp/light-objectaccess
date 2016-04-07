@@ -16,6 +16,9 @@ use Light\ObjectAccess\TestData\DummyAddress;
 use Light\ObjectAccess\TestData\Post;
 use Light\ObjectAccess\TestData\PostType;
 use Light\ObjectAccess\TestData\Setup;
+use Light\ObjectAccess\Type\ComplexType;
+use Light\ObjectAccess\Type\TypeRegistry;
+use Light\ObjectAccess\Type\Util\DefaultTypeProvider;
 use Light\ObjectAccess\Transaction\Util\DummyTransaction;
 
 include_once("test/ObjectAccess/TestData/Setup.php");
@@ -132,6 +135,20 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf(Origin_PropertyOfObject::class, $resolvedAuthor->getOrigin());
 		$this->assertSame($resolvedAuthor->getOrigin()->getObject(), $resolvedPost);
 		$this->assertEquals($resolvedAuthor->getOrigin()->getPropertyName(), "author");
+	}
+	
+	/**
+	 * @expectedException Light\ObjectAccess\Exception\TypeCapabilityException
+	 * @expectedExceptionMessage Type "MyType" does not have capability "Light\ObjectAccess\Type\Complex\Create". Type does not support creation of objects
+	 */
+	public function testMissingCreateCapability()
+	{
+		$type = $this->getMockBuilder(ComplexType::class)->getMock();
+		$provider = new DefaultTypeProvider();
+		$provider->addType($type, "MyType", "http://my.type/");
+		$registry = new TypeRegistry($provider);
+		
+		$registry->getComplexTypeHelper("MyType")->createResource(new DummyTransaction());
 	}
 
 }
