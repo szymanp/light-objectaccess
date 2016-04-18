@@ -54,6 +54,7 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 		{
 			$this->database->addPost($value);
 			// TODO What about adding the collection to the transaction?
+			return $value->getId();
 		}
 		else
 		{

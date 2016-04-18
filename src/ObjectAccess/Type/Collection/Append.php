@@ -14,10 +14,12 @@ use Light\ObjectAccess\Transaction\Transaction;
 interface Append
 {
 	/**
-	 * Appends a value to the collection
+	 * Appends a value to the collection.
 	 * @param ResolvedCollection	$collection
 	 * @param mixed					$value
 	 * @param Transaction			$transaction
+	 * @return string|integer|null	The index or key which was assigned to this element in the collection,
+	 *								if the collection has a concept of indexes or keys; otherwise, NULL.
 	 */
 	public function appendValue(ResolvedCollection $collection, $value, Transaction $transaction);
 }

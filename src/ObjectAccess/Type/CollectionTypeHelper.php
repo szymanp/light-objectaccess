@@ -185,14 +185,17 @@ class CollectionTypeHelper extends TypeHelper
 	 * @param ResolvedCollection $collection
 	 * @param mixed              $value
 	 * @param Transaction        $transaction
+	 * @return string|integer|null	The index or key which was assigned to this element in the collection,
+	 *								if the collection has a concept of indexes or keys; otherwise, NULL.
 	 * @throws TypeCapabilityException	If the type does not support appending.
 	 */
 	public function appendValue(ResolvedCollection $collection, $value, Transaction $transaction)
 	{
 		if ($this->type instanceof Append)
 		{
-			$this->type->appendValue($collection, $value, $transaction);
+			$key = $this->type->appendValue($collection, $value, $transaction);
 			$transaction->markAsChanged($collection);
+			return $key;
 		}
 		else
 		{
