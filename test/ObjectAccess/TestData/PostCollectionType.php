@@ -3,7 +3,7 @@ namespace Light\ObjectAccess\TestData;
 
 use Light\ObjectAccess\Type\Collection\SetElementAtKey;
 use Szyman\Exception\Exception;
-use Szyman\Exception\InvalidArgumentException;
+use Szyman\Exception\InvalidArgumentTypeException;
 use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Query\Query;
 use Light\ObjectAccess\Query\Scope;
@@ -187,7 +187,7 @@ class PostCollectionType extends DefaultCollectionType implements Append, Iterat
 	 */
 	public function setElementAtKey(ResolvedCollection $collection, $key, $value, Transaction $transaction)
 	{
-		if (!is_int($key)) throw InvalidArgumentException::newInvalidType('key', $key, 'integer');
+		if (!is_int($key)) throw new InvalidArgumentTypeException('key', $key, 'integer');
 
 		if ($collection->getOrigin() instanceof Origin_Unavailable)
 		{

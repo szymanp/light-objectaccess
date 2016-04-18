@@ -92,7 +92,7 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException Szyman\Exception\InvalidArgumentException
+	 * @expectedException Szyman\Exception\InvalidArgumentTypeException
 	 */
 	public function testSetWithKeyInvalidKeyType()
 	{

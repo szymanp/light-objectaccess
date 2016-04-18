@@ -2,7 +2,7 @@
 namespace Light\ObjectAccess\Type\Util;
 
 use Szyman\Exception\Exception;
-use Szyman\Exception\InvalidArgumentException;
+use Szyman\Exception\InvalidArgumentTypeException;
 
 /**
  * A class for setting and getting properties of PHP objects.
@@ -24,7 +24,7 @@ class PhpObjectMutator
     {
 		if (!is_object($object))
 		{
-			throw InvalidArgumentException::newInvalidType('$object', $object, 'object');
+			throw new InvalidArgumentTypeException('$object', $object, 'object');
 		}
         $this->object = $object;
     }

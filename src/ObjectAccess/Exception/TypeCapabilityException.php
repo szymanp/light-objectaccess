@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Exception;
 
-use Szyman\Exception\InvalidArgumentException;
+use Szyman\Exception\InvalidArgumentTypeException;
 use Light\ObjectAccess\Type\Type;
 use Light\ObjectAccess\Type\TypeHelper;
 
@@ -32,7 +32,7 @@ class TypeCapabilityException extends TypeException
 		}
 		else
 		{
-			throw InvalidArgumentException::newInvalidType('$type', $type, 'Type|TypeHelper');
+			throw new InvalidArgumentTypeException('$type', $type, 'Type|TypeHelper');
 		}
 		
 		$message = 'Type "' . $name . '" does not have capability "' . $requiredInterface . '"';
