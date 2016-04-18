@@ -5,52 +5,50 @@ use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Resource\Addressing\ResourceAddress;
 
 /**
- * A ResourceAddress that doesn't keep any address.
+ * A ResourceAddress that indicates a lack of address.
  */
 final class EmptyResourceAddress implements ResourceAddress
 {
+	private static $instance;
+
 	/**
+	 * Returns an address instance.
 	 * @return EmptyResourceAddress
 	 */
 	public static function create()
 	{
-		return new self;
+		if (is_null(self::$instance)) self::$instance = new self;
+		return self::$instance;
 	}
 
 	private function __construct()
 	{
+		// A private constructor - use create() instead.
 	}
 
-	/**
-	 * @param Scope $scope
-	 * @return ResourceAddress    A new ResourceAddress object representing the original address
-	 *                          with the scope object appended at the end.
-	 */
+	/** @inheritdoc */
 	public function appendScope(Scope $scope)
 	{
-		// Appending to an EmtpyResourceAddress doesn't change the address - it is still empty.
+		// Appending to an EmptyResourceAddress doesn't change the address - it is still empty.
 		return $this;
 	}
 
-	/**
-	 * @param string $pathElement
-	 * @return ResourceAddress    A new ResourceAddress object representing the original address
-	 *                            with the new element appended at the end.
-	 */
+	/** @inheritdoc */
 	public function appendElement($pathElement)
 	{
-		// Appending to an EmtpyResourceAddress doesn't change the address - it is still empty.
+		// Appending to an EmptyResourceAddress doesn't change the address - it is still empty.
 		return $this;
 	}
 
+	/** @inheritdoc */
 	public function hasStringForm()
 	{
 		return false;
 	}
 
+	/** @inheritdoc */
 	public function getAsString()
 	{
 		return "(empty)";
 	}
-
 }
