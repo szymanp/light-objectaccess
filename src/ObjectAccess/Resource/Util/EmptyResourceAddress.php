@@ -28,6 +28,7 @@ final class EmptyResourceAddress implements ResourceAddress
 	 */
 	public function appendScope(Scope $scope)
 	{
+		// Appending to an EmtpyResourceAddress doesn't change the address - it is still empty.
 		return $this;
 	}
 
@@ -38,6 +39,7 @@ final class EmptyResourceAddress implements ResourceAddress
 	 */
 	public function appendElement($pathElement)
 	{
+		// Appending to an EmtpyResourceAddress doesn't change the address - it is still empty.
 		return $this;
 	}
 
