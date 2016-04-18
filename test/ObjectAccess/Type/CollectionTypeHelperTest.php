@@ -64,6 +64,8 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf(ResolvedValue::class, $result);
 		$this->assertEquals(5050, $result->getOrigin()->getKey());
+		$this->assertSame($post, $result->getValue());
+		$this->assertSame($helper->getBaseTypeHelper(), $result->getTypeHelper());
 		$this->assertSame($post, $this->setup->getDatabase()->getPost(5050));
 
 		// Check the transaction
