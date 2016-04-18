@@ -9,6 +9,8 @@ use Light\ObjectAccess\Transaction\Transaction;
  *
  * If an element at the specified key in the collection already exists, then it is replaced with the new one.
  * The collection may change the element so that it adheres to the specified key.
+ *
+ * The given key should allow the element to be retrieved using {@link CollectionType::getElementAtKey}.
  */
 interface SetElementAtKey
 {
@@ -16,7 +18,7 @@ interface SetElementAtKey
 	 * Sets the value of the element in the collection at the specified key.
 	 *
 	 * @param ResolvedCollection	$collection
-	 * @param mixed					$key
+	 * @param string|integer		$key
 	 * @param mixed					$value
 	 * @param Transaction			$transaction
 	 */

@@ -62,7 +62,8 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$post->setId(5050);
 		$result = $helper->appendValue($coll, $post, $tx = new DummyTransaction());
 
-		$this->assertEquals(5050, $result);
+		$this->assertInstanceOf(ResolvedValue::class, $result);
+		$this->assertEquals(5050, $result->getOrigin()->getKey());
 		$this->assertSame($post, $this->setup->getDatabase()->getPost(5050));
 
 		// Check the transaction
@@ -77,8 +78,10 @@ class CollectionTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$coll = new ResolvedCollectionResource($helper, EmptyResourceAddress::create(), Origin::unavailable());
 
 		$post = new Post();
-		$helper->setValue($coll, 5050, $post, $tx = new DummyTransaction());
+		$result = $helper->setValue($coll, 5050, $post, $tx = new DummyTransaction());
 
+		$this->assertInstanceOf(ResolvedValue::class, $result);
+		$this->assertEquals(5050, $result->getOrigin()->getKey());
 		$this->assertSame($post, $this->setup->getDatabase()->getPost(5050));
 
 		// Check the transaction

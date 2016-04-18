@@ -84,8 +84,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * Returns an element from the collection at the given key.
 	 * @param ResolvedCollection $coll
 	 * @param string|integer     $key
-	 * @return ResolvedValue 	A ResolvedValue object, if the element exists;
-	 *                        	otherwise, NULL.
+	 * @return ResolvedValue 	A ResolvedValue object, if the element exists; otherwise, NULL.
 	 */
 	public function getElementAtKey(ResolvedCollection $coll, $key)
 	{
@@ -169,7 +168,7 @@ class CollectionTypeHelper extends TypeHelper
 			$collectionValue = $this->type->read($collection);
 			if (!$this->isValidValue($collectionValue))
 			{
-				throw new InvalidReturnValue(get_class($this->type), "read", $collectionValue, "A value valid for this type");
+				throw UnexpectedValueException::newInvalidReturnValue($this->type, 'read', $collectionValue, "Expecting a value valid for this type");
 			}
 			$address = $collection->getAddress()->appendScope(Scope::createEmptyScope());
 			return new ResolvedCollectionValue($this, $collectionValue, $address, $collection->getOrigin());
@@ -185,8 +184,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * @param ResolvedCollection $collection
 	 * @param mixed              $value
 	 * @param Transaction        $transaction
-	 * @return string|integer|null	The index or key which was assigned to this element in the collection,
-	 *								if the collection has a concept of indexes or keys; otherwise, NULL.
+	 * @return ResolvedValue	 The resource appended to the collection.
 	 * @throws TypeCapabilityException	If the type does not support appending.
 	 */
 	public function appendValue(ResolvedCollection $collection, $value, Transaction $transaction)
@@ -195,7 +193,11 @@ class CollectionTypeHelper extends TypeHelper
 		{
 			$key = $this->type->appendValue($collection, $value, $transaction);
 			$transaction->markAsChanged($collection);
-			return $key;
+
+			// All collections provide the <kbd>getElementAtKey</kbd> method, therefore it is possible to address
+			// the element using the address of the collection with the key appended.
+			$address = $collection->getAddress()->appendElement($key);
+			return ResolvedValue::create($this->getBaseTypeHelper(), $value, $address, Origin::elementInCollection($collection, $key));
 		}
 		else
 		{
@@ -209,6 +211,7 @@ class CollectionTypeHelper extends TypeHelper
 	 * @param mixed              $key
 	 * @param mixed              $value
 	 * @param Transaction        $transaction
+	 * @return ResolvedValue	 The resource appended to the collection.
 	 * @throws TypeCapabilityException	If the type does not support setting elements by key.
 	 */
 	public function setValue(ResolvedCollection $collection, $key, $value, Transaction $transaction)
@@ -217,6 +220,11 @@ class CollectionTypeHelper extends TypeHelper
 		{
 			$this->type->setElementAtKey($collection, $key, $value, $transaction);
 			$transaction->markAsChanged($collection);
+
+			// All collections provide the <kbd>getElementAtKey</kbd> method, therefore it is possible to address
+			// the element using the address of the collection with the key appended.
+			$address = $collection->getAddress()->appendElement($key);
+			return ResolvedValue::create($this->getBaseTypeHelper(), $value, $address, Origin::elementInCollection($collection, $key));
 		}
 		else
 		{
