@@ -11,6 +11,7 @@ use Light\ObjectAccess\Resource\ResolvedNull;
 use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedResource;
 use Light\ObjectAccess\Resource\ResolvedValue;
+use Light\ObjectAccess\Resource\Addressing\CanonicalResourceAddress;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
 use Light\ObjectAccess\Transaction\Transaction;
 use Light\ObjectAccess\Type\Complex\CanonicalAddress;
@@ -52,7 +53,7 @@ class ComplexTypeHelper extends TypeHelper
 		if ($type instanceof Create)
 		{
 			$object = $type->createObject($transaction);
-			$address = ($type instanceof CanonicalAddress) ? $address = $type->getCanonicalAddress($object) : EmptyResourceAddress::create();
+			$address = ($type instanceof CanonicalAddress) ? CanonicalResourceAddress::create($type->getCanonicalAddress($object)) : EmptyResourceAddress::create();
 
 			$resource = new ResolvedObject($this, $object, $address, Origin::unavailable());
 			$transaction->markAsCreated($resource);
@@ -62,6 +63,19 @@ class ComplexTypeHelper extends TypeHelper
 		{
 			throw new TypeCapabilityException($this, Create::class, 'Type does not support creation of objects');
 		}
+	}
+	
+	/**
+	 * Clears all fields on the resource.
+	 *
+	 * 
+	 *
+	 * @param ResolvedObject $resource
+	 * @param Transaction    $transaction
+	 */
+	public function clearResource(ResolvedObject $resource, Transaction $transaction)
+	{
+		
 	}
 
 	public function deleteResource(Transaction $transaction)

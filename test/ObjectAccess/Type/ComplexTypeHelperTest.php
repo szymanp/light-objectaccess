@@ -10,6 +10,7 @@ use Light\ObjectAccess\Resource\ResolvedObject;
 use Light\ObjectAccess\Resource\ResolvedScalar;
 use Light\ObjectAccess\Resource\ResolvedValue;
 use Light\ObjectAccess\Resource\Util\EmptyResourceAddress;
+use Light\ObjectAccess\Resource\Addressing\CanonicalResourceAddress;
 use Light\ObjectAccess\TestData\Author;
 use Light\ObjectAccess\TestData\Database;
 use Light\ObjectAccess\TestData\DummyAddress;
@@ -106,7 +107,8 @@ class ComplexTypeHelperTest extends \PHPUnit_Framework_TestCase
 		$resource = $typeHelper->createResource($tx = new DummyTransaction());
 
 		$this->assertInstanceOf(ResolvedObject::class, $resource);
-		$this->assertInstanceOf(DummyAddress::class, $resource->getAddress());
+		$this->assertInstanceOf(CanonicalResourceAddress::class, $resource->getAddress());
+		$this->assertInstanceOf(DummyAddress::class, $resource->getAddress()->getInnerAddress());
 		$this->assertEquals("//post/" . $resource->getValue()->getId(), $resource->getAddress()->getAsString());
 		$this->assertInstanceOf(Origin_Unavailable::class, $resource->getOrigin());
 
