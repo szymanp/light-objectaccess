@@ -5,14 +5,25 @@ use Light\ObjectAccess\Resource\ResolvedResource;
 
 /**
  * A transaction encompassing changes to resources.
- *
  */
 interface Transaction
 {
+	/**
+	 * The resource has been created within this transaction.
+	 * @param ResolvedResoure	$resource
+	 */
 	public function markAsCreated(ResolvedResource $resource);
 
+	/**
+	 * The resource has been changed within this transaction.
+	 * @param ResolvedResoure	$resource
+	 */
 	public function markAsChanged(ResolvedResource $resource);
 
+	/**
+	 * The resource has been deleted with this transaction.
+	 * @param ResolvedResoure	$resource
+	 */
 	public function markAsDeleted(ResolvedResource $resource);
 
 	/**
@@ -46,7 +57,7 @@ interface Transaction
 	 * of transferring the changes to the database.
 	 */
 	public function transfer();
-
+	
 	/**
 	 * Commit the changes done in this transaction.
 	 */
