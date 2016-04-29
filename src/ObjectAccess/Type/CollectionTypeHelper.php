@@ -5,6 +5,7 @@ use Light\ObjectAccess\Type\Collection\SetElementAtKey;
 use Szyman\Exception\UnexpectedValueException;
 use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\PropertyException;
 use Light\ObjectAccess\Exception\TypeCapabilityException;
 use Light\ObjectAccess\Query\Scope;
 use Light\ObjectAccess\Query\Scope\EmptyScope;
@@ -60,7 +61,7 @@ class CollectionTypeHelper extends TypeHelper
 			$property = $this->type->getProperty($propertyName);
 			if (is_null($property))
 			{
-				throw new TypeException("Property \"%1\" does not exist in type %2", $propertyName, $this->getName());
+				throw new PropertyException($this, $propertyName, 'does not exist');
 			}
 			return $this->typeRegistry->getTypeHelperByName($property->getTypeName());
 		}

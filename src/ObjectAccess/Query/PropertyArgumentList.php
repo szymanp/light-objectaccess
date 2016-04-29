@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Query;
 
-use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\PropertyException;
 use Light\ObjectAccess\Query\Argument\QueryArgument;
 use Light\ObjectAccess\Type\Collection\Property;
 use Light\ObjectAccess\Type\TypeHelper;
@@ -34,16 +34,13 @@ class PropertyArgumentList implements \IteratorAggregate
 	 * Appends a new argument value.
 	 * @param QueryArgument $argument
 	 * @return $this
-	 * @throws TypeException	If the argument value is not valid for this property.
+	 * @throws PropertyException	If the argument value is not valid for this property.
 	 */
 	public function append(QueryArgument $argument)
 	{
 		if (!$this->typeHelper->isValidValue($argument->getValue()))
 		{
-			throw new TypeException("Value %1 is not valid for property %2::%3",
-									$argument->getValue(),
-									$this->getTypeHelper()->getName(),
-									$this->getName());
+			throw new PropertyException($this->typeHelper, $this->property, ' does not support values of type ' . gettype($argument->getValue()));
 		}
 
 		$this->values[] = $argument;

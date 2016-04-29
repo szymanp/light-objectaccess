@@ -27,7 +27,7 @@ class QueryConcreteTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException 			Light\ObjectAccess\Exception\TypeException
-	 * @expectedExceptionMessage	Value 123 is not valid for property Light\ObjectAccess\TestData\Author::author
+	 * @expectedExceptionMessage	Property Light\ObjectAccess\TestData\Author::author does not support values of type integer
 	 */
 	public function testInvalidPropertyValue()
 	{

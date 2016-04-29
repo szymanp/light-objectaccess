@@ -1,7 +1,7 @@
 <?php
 namespace Light\ObjectAccess\Type\Util;
 
-use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\PropertyException;
 use Light\ObjectAccess\Type\Complex\Property;
 use Light\ObjectAccess\Type\ComplexType;
 use Light\ObjectAccess\Type\Exception;
@@ -21,7 +21,7 @@ class DefaultComplexType implements ComplexType
 	/**
 	 * Returns a description of the named property.
 	 * @param string $propertyName
-	 * @throws TypeException    If the property doesn't exist.
+	 * @throws PropertyException    If the property doesn't exist.
 	 * @return Property
 	 */
 	public function getProperty($propertyName)
@@ -30,7 +30,7 @@ class DefaultComplexType implements ComplexType
 		{
 			return $this->properties[$propertyName];
 		}
-		throw new TypeException("Property %1 does not exist", $propertyName);
+		throw new PropertyException($this, $propertyName, 'does not exist');
 	}
 
 	/**

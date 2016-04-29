@@ -4,6 +4,7 @@ namespace Light\ObjectAccess\Type;
 use Szyman\Exception\NotImplementedException;
 use Light\ObjectAccess\Exception\ResourceException;
 use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\PropertyException;
 use Light\ObjectAccess\Exception\TypeCapabilityException;
 use Light\ObjectAccess\Resource\Origin;
 use Light\ObjectAccess\Resource\ResolvedCollectionResource;
@@ -97,7 +98,7 @@ class ComplexTypeHelper extends TypeHelper
 
 		if (!$property->isReadable())
 		{
-			throw new TypeException("Property %1::%2 is not readable", $this->getName(), $propertyName);
+			throw new PropertyException($this, $property, "is not readable");
 		}
 
 		$value = $property->readProperty($resource);
@@ -164,7 +165,7 @@ class ComplexTypeHelper extends TypeHelper
 
 		if (!$property->isWritable())
 		{
-			throw new TypeException("Property %1::%2 is not writable", $this->getName(), $propertyName);
+			throw new PropertyException($this, $property, 'is not writable');
 		}
 
 		$property->writeProperty($resource, $value, $transaction);

@@ -2,6 +2,7 @@
 namespace Light\ObjectAccess\Query;
 
 use Light\ObjectAccess\Exception\TypeException;
+use Light\ObjectAccess\Exception\PropertyException;
 use Light\ObjectAccess\Exception\TypeCapabilityException;
 use Light\ObjectAccess\Query\Argument\QueryArgument;
 use Light\ObjectAccess\Type\Collection\Search;
@@ -32,12 +33,12 @@ class QueryConcrete extends Query
 		$property = $this->type->getProperty($propertyName);
 		if (is_null($property))
 		{
-			throw new TypeException("Property \"%1\" does not exist in type %2", $propertyName, $this->typeHelper->getName());
+			throw new PropertyException($this->typeHelper, $propertyName, 'does not exist');
 		}
 
 		if (!$property->isValidArgument($argument))
 		{
-			throw new TypeException("The specified argument is not valid for property %1::%2", $this->typeHelper->getName(), $property);
+			throw new PropertyException($this->typeHelper, $property, 'does not support values of type ' . gettype($argument));
 		}
 
 		$this->getArgumentList($propertyName)->append($argument);

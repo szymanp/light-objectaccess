@@ -6,7 +6,7 @@ use Light\ObjectAccess\Type\Type;
 use Light\ObjectAccess\Type\TypeHelper;
 
 /**
- * An exception thrown if a type doesn't implement the required capability.
+ * An exception thrown if a type doesn't implement the required capability for the requested action.
  *
  * For example:
  * <code>
