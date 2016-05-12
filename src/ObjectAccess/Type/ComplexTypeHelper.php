@@ -163,7 +163,9 @@ class ComplexTypeHelper extends TypeHelper
 	{
 		$property = $this->getType()->getProperty($propertyName);
 
-		if (!$property->isWritable())
+		$writable = in_array($resource, $transaction->getCreatedResources(), true) ? $property->isWritableOnCreate() : $property->isWritableOnUpdate();
+
+		if (!$writable)
 		{
 			throw new PropertyException($this, $property, 'is not writable');
 		}

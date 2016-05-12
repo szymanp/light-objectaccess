@@ -25,10 +25,16 @@ interface Property
 	public function isReadable();
 
 	/**
-	 * Returns true if the property can be written to.
+	 * Returns true if the property can be written to when the object is being created.
 	 * @return bool
 	 */
-	public function isWritable();
+	public function isWritableOnCreate();
+
+	/**
+	 * Returns true if the property can be written to when the object is modified.
+	 * @return bool
+	 */
+	public function isWritableOnUpdate();
 
 	/**
 	 * Reads a value from this property on the specified resource.

@@ -21,7 +21,16 @@ class CollectionResourceProperty extends AbstractProperty
 	 * Returns true if the property can be written to.
 	 * @return bool
 	 */
-	public function isWritable()
+	public function isWritableOnCreate()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns true if the property can be written to when the object is modified.
+	 * @return bool
+	 */
+	public function isWritableOnUpdate()
 	{
 		return false;
 	}

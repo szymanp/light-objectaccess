@@ -20,7 +20,7 @@ class DefaultProperty extends AbstractProperty
 	/** @var bool */
 	private $readable;
 	/** @var bool */
-	private $writable;
+	private $writableOnCreate, $writableOnUpdate;
 	/** @var \Closure */
 	private $getter;
 	/** @var \Closure */
@@ -35,7 +35,8 @@ class DefaultProperty extends AbstractProperty
 	{
 		parent::__construct($name, $typeName);
 		$this->readable = true;
-		$this->writable = true;
+		$this->writableOnCreate = true;
+		$this->writableOnUpdate = true;
 	}
 
 	/**
@@ -48,12 +49,21 @@ class DefaultProperty extends AbstractProperty
 	}
 
 	/**
-	 * Returns true if the property can be written to.
+	 * Returns true if the property can be written to when the object is being created.
 	 * @return bool
 	 */
-	public function isWritable()
+	public function isWritableOnCreate()
 	{
-		return $this->writable;
+		return $this->writableOnCreate;
+	}
+
+	/**
+	 * Returns true if the property can be written to when the object is modified.
+	 * @return bool
+	 */
+	public function isWritableOnUpdate()
+	{
+		return $this->writableOnUpdate;
 	}
 
 	/**
@@ -149,7 +159,28 @@ class DefaultProperty extends AbstractProperty
 	 */
 	public function setWritable($writable)
 	{
-		$this->writable = $writable;
+		$this->writableOnCreate = $writable;
+		$this->writableOnUpdate = $writable;
+		return $this;
+	}
+
+	/**
+	 * @param boolean $writableOnCreate
+	 * @return $this
+	 */
+	public function setWritableOnCreate($writableOnCreate)
+	{
+		$this->writableOnCreate = $writableOnCreate;
+		return $this;
+	}
+
+	/**
+	 * @param boolean $writableOnUpdate
+	 * @return $this
+	 */
+	public function setWritableOnUpdate($writableOnUpdate)
+	{
+		$this->writableOnUpdate = $writableOnUpdate;
 		return $this;
 	}
 
