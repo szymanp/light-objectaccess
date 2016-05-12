@@ -3,6 +3,7 @@ namespace Light\ObjectAccess\Type\Collection;
 
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Transaction\Transaction;
+use Light\ObjectAccess\Exception\InvalidActionException;
 
 /**
  * An interface for CollectionTypes that support inserting elements into a collection at arbitrary positions.
@@ -20,6 +21,7 @@ interface Insert
 	 * @param mixed					$insertBefore	A key or value.
 	 * @param Transaction			$transaction
 	 * @return string|integer		The index or key that was assigned to the element.
+     * @throws InvalidActionException   Thrown if the given element does not qualify for appending to the collection.
 	 */
 	public function insertValue(ResolvedCollection $collection, $value, $insertBefore, Transaction $transaction);
 }

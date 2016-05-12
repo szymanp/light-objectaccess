@@ -3,6 +3,7 @@ namespace Light\ObjectAccess\Type\Collection;
 
 use Light\ObjectAccess\Resource\ResolvedCollection;
 use Light\ObjectAccess\Transaction\Transaction;
+use Light\ObjectAccess\Exception\InvalidActionException;
 
 /**
  * An interface for CollectionTypes that support appending elements to a collection at a given key.
@@ -21,6 +22,7 @@ interface SetElementAtKey
 	 * @param string|integer		$key
 	 * @param mixed					$value
 	 * @param Transaction			$transaction
+     * @throws InvalidActionException   Thrown if the given element does not qualify for appending to the collection.
 	 */
 	public function setElementAtKey(ResolvedCollection $collection, $key, $value, Transaction $transaction);
 }
